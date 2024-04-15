@@ -2,6 +2,8 @@
   "name": "post-news-backend",
   "version": "1.0.0",
   "main": "index.js",
+  "repository": "https://github.com/pascoalkahamba/post-news-backend.git",
+  "author": "<pascoalkahamba25@gmail.com>",
   "license": "MIT",
   "scripts": {
     "dev": "tsx watch ./src/server.ts",
