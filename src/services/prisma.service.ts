@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 
 class PrismaService {
-  private prisma = new PrismaClient();
+  public prisma = new PrismaClient();
   constructor() {
     this.connect();
   }

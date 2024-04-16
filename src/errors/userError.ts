@@ -13,6 +13,10 @@ export class UserError {
     throw new BaseError("Email invalido.", StatusCodes.BAD_REQUEST);
   }
 
+  static emailAlreadyExist() {
+    throw new BaseError("Email já cadastrado.", StatusCodes.CONFLICT);
+  }
+
   static invalidPassword() {
     throw new BaseError(
       "Senha do usuário deve ter mais de 5 carecteres.",
@@ -27,7 +31,10 @@ export class UserError {
     );
   }
 
-  static passwordWrong() {
-    throw new BaseError("Senha do usuário incorreto.", StatusCodes.NOT_FOUND);
+  static nameOrPasswordWrong() {
+    throw new BaseError(
+      "Senha ou nome do usuário incorretos.",
+      StatusCodes.NOT_FOUND
+    );
   }
 }
