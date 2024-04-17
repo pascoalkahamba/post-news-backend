@@ -15,10 +15,13 @@ export class UserController {
     try {
       const user = req.body as UserModal;
       userValidator.validator(user);
-      UserError.emailAlreadyExist();
       const userCreated = await userService.create(user);
 
-      res.status(StatusCodes.OK).json(userCreated);
+      if (!userCreated) {
+        UserError.emailAlreadyExist();
+      }
+
+      res.status(StatusCodes.CREATED).json(userCreated);
     } catch (error) {
       return handleError(error as BaseError, res);
     }
@@ -27,7 +30,13 @@ export class UserController {
   async login(req: Request, res: Response) {
     try {
       const user = req.body as UserModal;
-      userValidator.validator(user);
+      const logged = await userService.login(user.email, user.password);
+
+      if (!logged) {
+        UserError.emailOrPasswordWrong();
+      }
+
+      return res.status(StatusCodes.OK).json(logged);
     } catch (error) {
       return handleError(error as BaseError, res);
     }

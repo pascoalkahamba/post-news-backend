@@ -21,6 +21,10 @@ export class UserService {
         name: user.name,
         password: hashPassword,
       },
+      select: {
+        name: true,
+        email: true,
+      },
     });
 
     return created;
@@ -28,7 +32,7 @@ export class UserService {
 
   async login(email: string, password: string) {
     const userExists = await prismaService.prisma.user.findFirst({
-      where: { name: email },
+      where: { email },
     });
 
     if (!userExists) {
@@ -41,12 +45,16 @@ export class UserService {
       return;
     }
 
+    const { password: _, ...user } = userExists;
+
     const userToken = token.sign(
       { id: userExists.id },
       process.env.JWT_SECRET_KEY as string,
       { expiresIn: "8h" }
     );
-
-    return userToken;
+    return {
+      user,
+      userToken,
+    };
   }
 }

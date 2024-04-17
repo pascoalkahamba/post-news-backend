@@ -31,9 +31,9 @@ export class UserError {
     );
   }
 
-  static nameOrPasswordWrong() {
+  static emailOrPasswordWrong() {
     throw new BaseError(
-      "Senha ou nome do usuário incorretos.",
+      "Senha ou email do usuário incorretos.",
       StatusCodes.NOT_FOUND
     );
   }
