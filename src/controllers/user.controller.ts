@@ -6,6 +6,7 @@ import { BaseError } from "../errors/baseError";
 import { UserService } from "../services/user.service";
 import { StatusCodes } from "http-status-codes";
 import { UserError } from "../errors/userError";
+import nodemailer from "nodemailer";
 
 const userValidator = new UserValidator();
 const userService = new UserService();
@@ -35,6 +36,8 @@ export class UserController {
       if (!logged) {
         UserError.emailOrPasswordWrong();
       }
+
+      const codigoValidacao = Math.floor(100000 + Math.random() * 900000);
 
       return res.status(StatusCodes.OK).json(logged);
     } catch (error) {
