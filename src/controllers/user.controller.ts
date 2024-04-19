@@ -6,7 +6,7 @@ import { BaseError } from "../errors/baseError";
 import { UserService } from "../services/user.service";
 import { StatusCodes } from "http-status-codes";
 import { UserError } from "../errors/userError";
-import nodemailer from "nodemailer";
+import { sendEmail } from "../services/nodemailer.service";
 
 const userValidator = new UserValidator();
 const userService = new UserService();
@@ -22,6 +22,10 @@ export class UserController {
         UserError.emailAlreadyExist();
       }
 
+      const validateCode = Math.floor(100000 + Math.random() * 900000);
+      const info = sendEmail(user.email, validateCode);
+      console.log(info);
+
       res.status(StatusCodes.CREATED).json(userCreated);
     } catch (error) {
       return handleError(error as BaseError, res);
@@ -36,8 +40,6 @@ export class UserController {
       if (!logged) {
         UserError.emailOrPasswordWrong();
       }
-
-      const codigoValidacao = Math.floor(100000 + Math.random() * 900000);
 
       return res.status(StatusCodes.OK).json(logged);
     } catch (error) {
