@@ -17,6 +17,13 @@ export class UserError {
     return new BaseError("Email já cadastrado.", StatusCodes.CONFLICT);
   }
 
+  static sendEmailFailed() {
+    return new BaseError(
+      "Falha ao enviar o codigo por email.",
+      StatusCodes.BAD_REQUEST
+    );
+  }
+
   static invalidPassword() {
     return new BaseError(
       "Senha do usuário deve ter mais de 5 carecteres.",

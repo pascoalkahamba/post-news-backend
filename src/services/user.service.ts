@@ -7,11 +7,11 @@ export class UserService {
   async create(user: UserModal) {
     const hashPassword = await bcrypt.hash(user.password, 10);
 
-    const emailExists = await prismaService.prisma.user.findFirst({
+    const emailExist = await prismaService.prisma.user.findFirst({
       where: { email: user.email },
     });
 
-    if (emailExists) {
+    if (emailExist) {
       return;
     }
 

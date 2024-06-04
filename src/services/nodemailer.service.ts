@@ -20,7 +20,10 @@ function sendEmail(userPash: string, validateCode: number) {
     };
     const info = transporter.sendMail(emailOptions);
 
-    return info;
+    return {
+      info,
+      validateCode,
+    };
   } catch (error) {
     console.log("erro ao enviar o email ", error);
   }

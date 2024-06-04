@@ -19,12 +19,22 @@ export class UserController {
       const userCreated = await userService.create(user);
 
       if (!userCreated) {
-        UserError.emailAlreadyExist();
+        console.log("Email Existe");
+        throw UserError.emailAlreadyExist();
       }
 
+      console.log("Email nao existe");
+
       const validateCode = Math.floor(100000 + Math.random() * 900000);
-      const info = sendEmail(user.email, validateCode);
-      console.log(info);
+      // const sended = sendEmail(user.email, validateCode);
+
+      // if (!sended) {
+      //   UserError.sendEmailFailed();
+      //   return;
+      // }
+      // const { info, validateCode: code } = sended;
+      // req.validateCode = code;
+      // console.log(info);
 
       res.status(StatusCodes.CREATED).json(userCreated);
     } catch (error) {
@@ -38,7 +48,7 @@ export class UserController {
       const logged = await userService.login(user.email, user.password);
 
       if (!logged) {
-        UserError.emailOrPasswordWrong();
+        throw UserError.emailOrPasswordWrong();
       }
 
       return res.status(StatusCodes.OK).json(logged);
