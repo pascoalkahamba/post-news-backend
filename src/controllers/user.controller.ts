@@ -48,6 +48,7 @@ export class UserController {
     try {
       const { validateCode } = req.body as { validateCode: number };
       const cookieValidateCode = req.cookies.validateCode as number;
+
       if (cookieValidateCode !== validateCode) {
         console.log("validateCode", cookieValidateCode);
         console.log("validateCode request ", req.validateCode);
