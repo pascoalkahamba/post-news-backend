@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import token from "jsonwebtoken";
 
 export class UserService {
-  async create(user: UserModal) {
+  async create(user: UserModal, verifyEmail: boolean) {
     const hashPassword = await bcrypt.hash(user.password, 10);
 
     const emailExist = await prismaService.prisma.user.findFirst({
@@ -12,22 +12,25 @@ export class UserService {
     });
 
     if (emailExist) {
-      return;
+      return false;
     }
 
-    const created = await prismaService.prisma.user.create({
-      data: {
-        email: user.email,
-        name: user.name,
-        password: hashPassword,
-      },
-      select: {
-        name: true,
-        email: true,
-      },
-    });
+    if (verifyEmail) {
+      const created = await prismaService.prisma.user.create({
+        data: {
+          email: user.email,
+          name: user.name,
+          password: hashPassword,
+        },
+        select: {
+          name: true,
+          email: true,
+        },
+      });
+      return created;
+    }
 
-    return created;
+    return true;
   }
 
   async login(email: string, password: string) {

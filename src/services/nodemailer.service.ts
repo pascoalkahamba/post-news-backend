@@ -4,10 +4,9 @@ import "dotenv/config";
 function sendEmail(userPash: string, validateCode: number) {
   try {
     const transporter = nodemailer.createTransport({
-      host: process.env.EMAIL_HOST,
-      port: process.env.EMAIL_PORT,
+      service: process.env.SERVICE_EMAIL,
       auth: {
-        user: process.env.EMAIL_USER,
+        user: process.env.DEV_EMAIL,
         pass: process.env.EMAIL_PASSWORD,
       },
     });
@@ -15,8 +14,8 @@ function sendEmail(userPash: string, validateCode: number) {
     const emailOptions = {
       from: process.env.DEV_EMAIL,
       to: `${userPash}`,
-      subject: "Código de validação da conta",
-      text: `Seu código de validação é: ${validateCode}`,
+      subject: "Código de verificação de conta",
+      text: `Seu código de verificação é: ${validateCode}`,
     };
     const info = transporter.sendMail(emailOptions);
 

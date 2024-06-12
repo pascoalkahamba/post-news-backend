@@ -8,5 +8,6 @@ const userController = new UserController();
 
 userRoutes.post("/", userController.create);
 userRoutes.post("/login", userController.login);
+userRoutes.post("/verifyEmail", userController.verifyEmail);
 
 export { userRoutes };

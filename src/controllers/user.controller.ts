@@ -10,13 +10,13 @@ import { sendEmail } from "../services/nodemailer.service";
 
 const userValidator = new UserValidator();
 const userService = new UserService();
-
+let newUser: UserModal = { email: "", name: "", password: "" };
 export class UserController {
   async create(req: Request, res: Response) {
     try {
       const user = req.body as UserModal;
       userValidator.validator(user);
-      const userCreated = await userService.create(user);
+      const userCreated = await userService.create(user, false);
 
       if (!userCreated) {
         console.log("Email Existe");
@@ -26,17 +26,40 @@ export class UserController {
       console.log("Email nao existe");
 
       const validateCode = Math.floor(100000 + Math.random() * 900000);
-      // const sended = sendEmail(user.email, validateCode);
+      const sended = sendEmail(user.email, validateCode);
 
-      // if (!sended) {
-      //   UserError.sendEmailFailed();
-      //   return;
-      // }
-      // const { info, validateCode: code } = sended;
-      // req.validateCode = code;
-      // console.log(info);
+      if (!sended) {
+        throw UserError.sendEmailFailed();
+      }
+      const { info, validateCode: code } = sended;
+      res.cookie("validateCode", code, { httpOnly: true, maxAge: 30000 });
+      newUser = user;
+      console.log(info);
+      console.log(newUser);
+      return res.status(StatusCodes.OK).json({
+        message: "Dados enviados com sucesso.",
+      });
+    } catch (error) {
+      return handleError(error as BaseError, res);
+    }
+  }
 
-      res.status(StatusCodes.CREATED).json(userCreated);
+  async verifyEmail(req: Request, res: Response) {
+    try {
+      const { validateCode } = req.body as { validateCode: number };
+      const cookieValidateCode = req.cookies.validateCode as number;
+      if (cookieValidateCode !== validateCode) {
+        console.log("validateCode", cookieValidateCode);
+        console.log("validateCode request ", req.validateCode);
+        console.log("user data ", req.user);
+        throw UserError.invalidEmail();
+      }
+
+      const userCreated = await userService.create(newUser, true);
+
+      if (userCreated) newUser = { email: "", name: "", password: "" };
+
+      return res.status(StatusCodes.CREATED).json(userCreated);
     } catch (error) {
       return handleError(error as BaseError, res);
     }
