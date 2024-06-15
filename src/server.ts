@@ -5,51 +5,45 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 
 const app = express();
-app.use(cors());
 
+const corsOptions = {
+  origin: "http://localhost:3000",
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
+
+app.options("*", cors(corsOptions));
 const port = process.env.PORT;
 
-// function romanToInt(s: string): number {
-//   const romanIntegerMap: { [key: string]: number } = {
-//     I: 1,
-//     V: 5,
-//     X: 10,
-//     L: 50,
-//     C: 100,
-//     D: 500,
-//     M: 1000,
-//   };
-
-//   const letterS = s.split("");
-//   const romanIntegerMapKey = Object.keys(romanIntegerMap);
+// function majorityElement(nums: number[]): number {
+//   const mapElement = new Map();
 //   let result = 0;
+//   let majorityKey = nums.length / 2;
+//   let maxTimes = 0;
+//   let maxExist = 0;
 
-//   for (let i = 0; i < letterS.length; i++) {
-//     const cur = letterS[i];
-//     const indexCur = romanIntegerMapKey.indexOf(cur);
-//     const indexCurPlusOne = romanIntegerMapKey.indexOf(letterS[i + 1]);
-
-//     const checkTest =
-//       indexCurPlusOne - indexCur === 1 || indexCurPlusOne - indexCur === 2;
-
-//     if (checkTest) {
-//       console.log(indexCurPlusOne - indexCur);
-
-//       result +=
-//         romanIntegerMap[
-//           romanIntegerMapKey[indexCur + (indexCurPlusOne - indexCur)]
-//         ] - romanIntegerMap[romanIntegerMapKey[indexCur]];
-//       i++;
-//       continue;
+//   for (let count = 0; count < nums.length; count++) {
+//     const currentNum = nums[count];
+//     if (mapElement.has(currentNum)) {
+//       mapElement.set(currentNum, maxTimes++);
+//       maxExist += mapElement.get(currentNum);
+//     } else {
+//       mapElement.set(
+//         currentNum,
+//         (maxTimes = Math.abs(maxTimes - maxExist + 1))
+//       );
 //     }
 
-//     result += romanIntegerMap[cur];
+//     if (maxExist > majorityKey) {
+//       result = currentNum;
+//     }
 //   }
 
 //   return result;
 // }
 
-// console.log(romanToInt("IV"));
+// console.log(majorityElement([1, 0, 2, 1, 0, 0, 0, 5, 5, 1]));
 
 app.use(express.json());
 app.use(bodyParser.json());

@@ -31,11 +31,16 @@ export class UserController {
       if (!sended) {
         throw UserError.sendEmailFailed();
       }
-      const { info, validateCode: code } = sended;
-      res.cookie("validateCode", code, { httpOnly: true, maxAge: 30000 });
+      const { validateCode: code } = sended;
+
+      // Quando hospedar o site usar o parametro secure:true em res.cookie para acesso apenas de site https
+      res.cookie("validateCode", code, {
+        httpOnly: true,
+        maxAge: 300000,
+        secure: false,
+      });
       newUser = user;
-      console.log(info);
-      console.log(newUser);
+
       return res.status(StatusCodes.OK).json({
         message: "Dados enviados com sucesso.",
       });
@@ -50,15 +55,16 @@ export class UserController {
       const cookieValidateCode = req.cookies.validateCode as number;
 
       if (cookieValidateCode !== validateCode) {
-        console.log("validateCode", cookieValidateCode);
-        console.log("validateCode request ", req.validateCode);
-        console.log("user data ", req.user);
+        console.log("cookieValidateCode ", cookieValidateCode);
+        console.log("validateCode ", validateCode);
         throw UserError.invalidEmail();
       }
 
       const userCreated = await userService.create(newUser, true);
 
-      if (userCreated) newUser = { email: "", name: "", password: "" };
+      if (userCreated) {
+        res.clearCookie("validateCode");
+      }
 
       return res.status(StatusCodes.CREATED).json(userCreated);
     } catch (error) {
