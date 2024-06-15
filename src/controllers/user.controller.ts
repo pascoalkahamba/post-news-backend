@@ -10,7 +10,6 @@ import { sendEmail } from "../services/nodemailer.service";
 
 const userValidator = new UserValidator();
 const userService = new UserService();
-let newUser: UserModal = { email: "", name: "", password: "" };
 export class UserController {
   async create(req: Request, res: Response) {
     try {
@@ -39,7 +38,12 @@ export class UserController {
         maxAge: 300000,
         secure: false,
       });
-      newUser = user;
+
+      res.cookie("newUser", user, {
+        httpOnly: true,
+        maxAge: 300000,
+        secure: false,
+      });
 
       return res.status(StatusCodes.OK).json({
         message: "Dados enviados com sucesso.",
@@ -53,8 +57,9 @@ export class UserController {
     try {
       const { validateCode } = req.body as { validateCode: number };
       const cookieValidateCode = req.cookies.validateCode as number;
+      const newUser = req.cookies.newUser as UserModal;
 
-      if (cookieValidateCode !== validateCode) {
+      if (cookieValidateCode != validateCode) {
         console.log("cookieValidateCode ", cookieValidateCode);
         console.log("validateCode ", validateCode);
         throw UserError.invalidEmail();
@@ -64,6 +69,7 @@ export class UserController {
 
       if (userCreated) {
         res.clearCookie("validateCode");
+        res.clearCookie("newUser");
       }
 
       return res.status(StatusCodes.CREATED).json(userCreated);
