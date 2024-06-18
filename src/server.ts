@@ -16,34 +16,32 @@ app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
 const port = process.env.PORT;
 
-// function majorityElement(nums: number[]): number {
+// function majorityElement(nums: number[]) {
 //   const mapElement = new Map();
+//   const majorityEle = nums.length / 2;
+//   // let maxTimes = 0;
+//   let maxIndex = 0;
 //   let result = 0;
-//   let majorityKey = nums.length / 2;
-//   let maxTimes = 0;
-//   let maxExist = 0;
 
 //   for (let count = 0; count < nums.length; count++) {
 //     const currentNum = nums[count];
+//     const currentIndex = count;
 //     if (mapElement.has(currentNum)) {
-//       mapElement.set(currentNum, maxTimes++);
-//       maxExist += mapElement.get(currentNum);
+//       maxIndex += mapElement.get(currentNum) + currentIndex;
+//       // mapElement.set(currentNum, maxIndex);
 //     } else {
-//       mapElement.set(
-//         currentNum,
-//         (maxTimes = Math.abs(maxTimes - maxExist + 1))
-//       );
+//       mapElement.set(currentNum, currentIndex);
+//       // maxIndex = 0;
 //     }
 
-//     if (maxExist > majorityKey) {
+//     if (maxIndex > majorityEle || maxIndex === 0) {
 //       result = currentNum;
 //     }
 //   }
 
 //   return result;
 // }
-
-// console.log(majorityElement([1, 0, 2, 1, 0, 0, 0, 5, 5, 1]));
+// console.log(majorityElement([6, 6, 6, 6, 7]));
 
 app.use(express.json());
 app.use(bodyParser.json());

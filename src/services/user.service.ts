@@ -30,7 +30,12 @@ export class UserService {
       return created;
     }
 
-    return true;
+    const userAbleCreated = {
+      name: "Pascoal Kahamba",
+      email: "pascoalkahamba25@gmail.com",
+    };
+
+    return userAbleCreated;
   }
 
   async login(email: string, password: string) {
