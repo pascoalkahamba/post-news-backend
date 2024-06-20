@@ -7,6 +7,7 @@ import { UserService } from "../services/user.service";
 import { StatusCodes } from "http-status-codes";
 import { UserError } from "../errors/userError";
 import { sendEmail } from "../services/nodemailer.service";
+import { z } from "zod";
 
 const userValidator = new UserValidator();
 const userService = new UserService();
@@ -105,6 +106,31 @@ export class UserController {
       console.log("current user", req.user);
 
       return res.status(StatusCodes.OK).json(userDeleted);
+    } catch (error) {
+      return handleError(error as BaseError, res);
+    }
+  }
+
+  async forgotPassword(req: Request, res: Response) {
+    try {
+      const newInfoUserSchema = z.object({
+        email: z.string(),
+        newPassword: z.string(),
+        verifyEmail: z.boolean(),
+      });
+
+      const { email, newPassword, verifyEmail } = newInfoUserSchema.parse(
+        req.body
+      );
+      const passwordChanged = await userService.updatePassword(
+        email,
+        newPassword,
+        verifyEmail
+      );
+
+      if (!passwordChanged) {
+        throw UserError.emailNotFound();
+      }
     } catch (error) {
       return handleError(error as BaseError, res);
     }

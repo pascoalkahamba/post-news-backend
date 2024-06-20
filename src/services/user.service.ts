@@ -1,4 +1,5 @@
 import { UserModal } from "../@types";
+import { MILLISECONDSINTHREEMONTHS } from "../utils";
 import { prismaService } from "./prisma.service";
 import bcrypt from "bcrypt";
 import token from "jsonwebtoken";
@@ -87,5 +88,71 @@ export class UserService {
     return userDeleted;
   }
 
-  async updatePasswordOrUsername(email: string) {}
+  async updatePassword(
+    email: string,
+    newPassword: string,
+    verifyEmail: boolean
+  ) {
+    const hashPassword = await bcrypt.hash(newPassword, 10);
+    let passwordUpdate;
+
+    const userExist = await prismaService.prisma.user.findFirst({
+      where: { email },
+    });
+
+    if (!userExist) {
+      return;
+    }
+
+    if (verifyEmail) {
+      passwordUpdate = await prismaService.prisma.user.update({
+        where: { email },
+        data: { password: hashPassword },
+        select: {
+          name: true,
+          email: true,
+        },
+      });
+    }
+
+    if (!passwordUpdate) {
+      return "not-accept";
+    }
+
+    return passwordUpdate;
+  }
+
+  async updateDataOfUser(id: number, newUser: UserModal, verifyEmail: boolean) {
+    const { email, name, password } = newUser;
+    const hashPassword = await bcrypt.hash(password, 10);
+
+    setTimeout(() => {}, MILLISECONDSINTHREEMONTHS);
+
+    const currentUser = await prismaService.prisma.user.findFirst({
+      where: { id },
+    });
+
+    if (!currentUser) {
+      return;
+    }
+
+    if (!verifyEmail && email !== currentUser.email) {
+      return currentUser.id;
+    }
+
+    const userUpdated = await prismaService.prisma.user.update({
+      where: { id },
+      data: {
+        name,
+        password: hashPassword,
+        email,
+      },
+      select: {
+        name: true,
+        email: true,
+      },
+    });
+
+    return userUpdated;
+  }
 }

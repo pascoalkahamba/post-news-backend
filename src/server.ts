@@ -37,7 +37,6 @@ const port = process.env.PORT;
 //   "majorityElem",
 //   majorityElement([3, 3, 4, 11, 4, 3, 11, 2, 12, 11, 12, 11])
 // );
-
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(cookieParser());
