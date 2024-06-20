@@ -17,6 +17,14 @@ export class UserError {
     return new BaseError("Email já cadastrado.", StatusCodes.CONFLICT);
   }
 
+  static emailNotFound() {
+    return new BaseError("Email não encontrado.", StatusCodes.NOT_FOUND);
+  }
+
+  static accountNotFound() {
+    return new BaseError("conta não encontrado.", StatusCodes.NOT_FOUND);
+  }
+
   static sendEmailFailed() {
     return new BaseError(
       "Falha ao enviar o codigo por email.",
@@ -33,7 +41,7 @@ export class UserError {
 
   static userNotFound() {
     return new BaseError(
-      "Nome do usuário não encontrado.",
+      "Dados do usuário não encontrados.",
       StatusCodes.NOT_FOUND
     );
   }

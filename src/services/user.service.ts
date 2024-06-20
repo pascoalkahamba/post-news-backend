@@ -39,24 +39,24 @@ export class UserService {
   }
 
   async login(email: string, password: string) {
-    const userExists = await prismaService.prisma.user.findFirst({
+    const userExist = await prismaService.prisma.user.findFirst({
       where: { email },
     });
 
-    if (!userExists) {
+    if (!userExist) {
       return;
     }
 
-    const hashPassword = await bcrypt.compare(password, userExists.password);
+    const hashPassword = await bcrypt.compare(password, userExist.password);
 
     if (!hashPassword) {
       return;
     }
 
-    const { password: _, ...user } = userExists;
+    const { password: _, ...user } = userExist;
 
     const userToken = token.sign(
-      { id: userExists.id },
+      { id: userExist.id },
       process.env.JWT_SECRET_KEY as string,
       { expiresIn: "8h" }
     );
@@ -65,4 +65,27 @@ export class UserService {
       userToken,
     };
   }
+
+  async delete(id: number) {
+    const userExist = await prismaService.prisma.user.findFirst({
+      where: { id },
+    });
+
+    if (!userExist) {
+      return;
+    }
+
+    const userDeleted = await prismaService.prisma.user.delete({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+      },
+    });
+
+    return userDeleted;
+  }
+
+  async updatePasswordOrUsername(email: string) {}
 }

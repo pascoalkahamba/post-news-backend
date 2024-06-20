@@ -16,32 +16,27 @@ app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
 const port = process.env.PORT;
 
-// function majorityElement(nums: number[]) {
-//   const mapElement = new Map();
-//   const majorityEle = nums.length / 2;
-//   // let maxTimes = 0;
-//   let maxIndex = 0;
-//   let result = 0;
+// function majorityElement(nums: number[]): number {
+//   let candidate = 0;
+//   let count = 0;
 
-//   for (let count = 0; count < nums.length; count++) {
-//     const currentNum = nums[count];
-//     const currentIndex = count;
-//     if (mapElement.has(currentNum)) {
-//       maxIndex += mapElement.get(currentNum) + currentIndex;
-//       // mapElement.set(currentNum, maxIndex);
-//     } else {
-//       mapElement.set(currentNum, currentIndex);
-//       // maxIndex = 0;
+//   for (let i = 0; i < nums.length; i++) {
+//     const currentNum = nums[i];
+
+//     if (count === 0) {
+//       candidate = currentNum;
 //     }
 
-//     if (maxIndex > majorityEle || maxIndex === 0) {
-//       result = currentNum;
-//     }
+//     count += currentNum === candidate ? 1 : -1;
 //   }
 
-//   return result;
+//   return candidate;
 // }
-// console.log(majorityElement([6, 6, 6, 6, 7]));
+
+// console.log(
+//   "majorityElem",
+//   majorityElement([3, 3, 4, 11, 4, 3, 11, 2, 12, 11, 12, 11])
+// );
 
 app.use(express.json());
 app.use(bodyParser.json());
@@ -51,3 +46,5 @@ app.use("/user", userRoutes);
 app.listen(port, () => {
   console.log("server running!");
 });
+
+export default app;

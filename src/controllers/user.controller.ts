@@ -92,4 +92,21 @@ export class UserController {
       return handleError(error as BaseError, res);
     }
   }
+
+  async delete(req: Request, res: Response) {
+    try {
+      const id = req.params.id as unknown as number;
+      const userDeleted = await userService.delete(+id);
+
+      if (!userDeleted) {
+        console.log("user is not exist.");
+        throw UserError.userNotFound();
+      }
+      console.log("current user", req.user);
+
+      return res.status(StatusCodes.OK).json(userDeleted);
+    } catch (error) {
+      return handleError(error as BaseError, res);
+    }
+  }
 }

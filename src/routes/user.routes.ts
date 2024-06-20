@@ -4,10 +4,12 @@ import { authMiddleware } from "../middlewares/auth.middleware";
 
 const userRoutes = express.Router();
 const userController = new UserController();
-// userRoutes.use(authMiddleware);
 
 userRoutes.post("/", userController.create);
 userRoutes.post("/login", userController.login);
 userRoutes.post("/verifyEmail", userController.verifyEmail);
+
+userRoutes.use(authMiddleware);
+userRoutes.delete("/delete/:id", userController.delete);
 
 export { userRoutes };

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { UserService } from "../src/services/user.service";
 
-describe("Should able to create user account", () => {
+describe("You should able to manager user data without any mistake.", () => {
   it("create new user account", () => {
     const userService = new UserService();
 
@@ -17,7 +17,11 @@ describe("Should able to create user account", () => {
     ).resolves.toBeTypeOf("object");
   });
 
-  it("Should be igaul two", () => {
-    expect(1 + 1).toEqual(2);
+  it("login on the user account", () => {
+    const userService = new UserService();
+
+    expect(
+      userService.login("pascoalcomercial25@gmail.com", "Kahamba123")
+    ).resolves.toBeTypeOf("object");
   });
 });
