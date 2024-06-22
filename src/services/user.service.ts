@@ -1,11 +1,11 @@
-import { UserModal } from "../@types";
+import { UserModalT } from "../@types";
 import { MILLISECONDSINTHREEMONTHS } from "../utils";
 import { prismaService } from "./prisma.service";
 import bcrypt from "bcrypt";
 import token from "jsonwebtoken";
 
 export class UserService {
-  async create(user: UserModal, verifyEmail: boolean) {
+  async create(user: UserModalT) {
     const hashPassword = await bcrypt.hash(user.password, 10);
 
     const emailExist = await prismaService.prisma.user.findFirst({
@@ -16,27 +16,18 @@ export class UserService {
       return false;
     }
 
-    if (verifyEmail) {
-      const created = await prismaService.prisma.user.create({
-        data: {
-          email: user.email,
-          name: user.name,
-          password: hashPassword,
-        },
-        select: {
-          name: true,
-          email: true,
-        },
-      });
-      return created;
-    }
-
-    const userAbleCreated = {
-      name: "Pascoal Kahamba",
-      email: "pascoalkahamba25@gmail.com",
-    };
-
-    return userAbleCreated;
+    const created = await prismaService.prisma.user.create({
+      data: {
+        email: user.email,
+        name: user.name,
+        password: hashPassword,
+      },
+      select: {
+        name: true,
+        email: true,
+      },
+    });
+    return created;
   }
 
   async login(email: string, password: string) {
@@ -122,7 +113,11 @@ export class UserService {
     return passwordUpdate;
   }
 
-  async updateDataOfUser(id: number, newUser: UserModal, verifyEmail: boolean) {
+  async updateDataOfUser(
+    id: number,
+    newUser: UserModalT,
+    verifyEmail: boolean
+  ) {
     const { email, name, password } = newUser;
     const hashPassword = await bcrypt.hash(password, 10);
 

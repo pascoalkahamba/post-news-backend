@@ -13,6 +13,19 @@ export class UserError {
     return new BaseError("Email invalido.", StatusCodes.BAD_REQUEST);
   }
 
+  static noAccpet() {
+    return new BaseError(
+      "Operação rejeitada confirme o seu email.",
+      StatusCodes.BAD_REQUEST
+    );
+  }
+
+  static emailNotAvailable() {
+    return new BaseError(
+      "Este email não esta a funcionar.",
+      StatusCodes.BAD_REQUEST
+    );
+  }
   static emailAlreadyExist() {
     return new BaseError("Email já cadastrado.", StatusCodes.CONFLICT);
   }

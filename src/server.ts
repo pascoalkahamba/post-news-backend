@@ -16,27 +16,33 @@ app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
 const port = process.env.PORT;
 
-// function majorityElement(nums: number[]): number {
-//   let candidate = 0;
-//   let count = 0;
+// function isHappy(num: number): boolean {
+//   const numsS = num.toString().split("");
 
-//   for (let i = 0; i < nums.length; i++) {
-//     const currentNum = nums[i];
-
-//     if (count === 0) {
-//       candidate = currentNum;
-//     }
-
-//     count += currentNum === candidate ? 1 : -1;
+//   let result = 0;
+//   const mapNums = new Map();
+//   if (num < 10) {
+//     return false;
 //   }
 
-//   return candidate;
-// }
+//   for (let i = 0; i < numsS.length; i++) {
+//     const currNum = numsS[i];
+//     const currNumPlusOne = numsS[i + 1];
+//     if (!numsS.includes(currNumPlusOne)) {
+//       break;
+//     }
+//     result += Number(currNum) ** 2 + Number(currNumPlusOne) ** 2;
 
-// console.log(
-//   "majorityElem",
-//   majorityElement([3, 3, 4, 11, 4, 3, 11, 2, 12, 11, 12, 11])
-// );
+//     if (result === 1) {
+//       return true;
+//     }
+//   }
+
+//   console.log("result ", result);
+
+//   return false;
+// }
+// console.log("happy number ", isHappy(100));
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(cookieParser());

@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { UserModal } from "../@types";
+import { UserModalT } from "../@types";
 import { UserValidator } from "../validators/user.validator";
 import { handleError } from "../errors/handleError";
 import { BaseError } from "../errors/baseError";
@@ -7,16 +7,25 @@ import { UserService } from "../services/user.service";
 import { StatusCodes } from "http-status-codes";
 import { UserError } from "../errors/userError";
 import { sendEmail } from "../services/nodemailer.service";
-import { z } from "zod";
+import { NewPasswordI, VerifyEmailI } from "../interfaces";
+import { dynamicCode } from "../utils";
+import { createCookies, deleteCookies } from "../middlewares/manageCookies";
 
 const userValidator = new UserValidator();
 const userService = new UserService();
 export class UserController {
   async create(req: Request, res: Response) {
     try {
-      const user = req.body as UserModal;
+      const user = req.body as UserModalT;
       userValidator.validator(user);
-      const userCreated = await userService.create(user, false);
+      const acceptEmail = req.cookies.availableEmail as string;
+      console.log("acceptEmail", acceptEmail);
+
+      if (!acceptEmail) {
+        throw UserError.noAccpet();
+      }
+
+      const userCreated = await userService.create(user);
 
       if (!userCreated) {
         console.log("Email Existe");
@@ -25,30 +34,8 @@ export class UserController {
 
       console.log("Email nao existe");
 
-      const validateCode = Math.floor(100000 + Math.random() * 900000);
-      const sended = sendEmail(user.email, validateCode);
-
-      if (!sended) {
-        throw UserError.sendEmailFailed();
-      }
-      const { validateCode: code } = sended;
-
-      // Quando hospedar o site usar o parametro secure:true em res.cookie para acesso apenas de site https
-      res.cookie("validateCode", code, {
-        httpOnly: true,
-        maxAge: 300000,
-        secure: false,
-      });
-
-      res.cookie("newUser", user, {
-        httpOnly: true,
-        maxAge: 300000,
-        secure: false,
-      });
-
-      return res.status(StatusCodes.OK).json({
-        message: "Dados enviados com sucesso.",
-      });
+      deleteCookies(res, "availableEmail");
+      return res.status(StatusCodes.CREATED).json(userCreated);
     } catch (error) {
       return handleError(error as BaseError, res);
     }
@@ -56,24 +43,37 @@ export class UserController {
 
   async verifyEmail(req: Request, res: Response) {
     try {
-      const { validateCode } = req.body as { validateCode: number };
-      const cookieValidateCode = req.cookies.validateCode as number;
-      const newUser = req.cookies.newUser as UserModal;
+      const { email, code } = req.body as VerifyEmailI;
+      const expiredCode = req.cookies.code as string;
+      userValidator.validator({
+        email,
+        password: code,
+        name: "pascoalkahamba",
+      });
 
-      if (cookieValidateCode != validateCode) {
-        console.log("cookieValidateCode ", cookieValidateCode);
-        console.log("validateCode ", validateCode);
-        throw UserError.invalidEmail();
+      if (!expiredCode) {
+        const validateCode = dynamicCode();
+        sendEmail(email, validateCode, "Código de verificação de conta");
+        createCookies(res, { key: "code", value: validateCode });
       }
 
-      const userCreated = await userService.create(newUser, true);
+      console.log("expiredCode ", expiredCode);
 
-      if (userCreated) {
-        res.clearCookie("validateCode");
-        res.clearCookie("newUser");
+      // if (!sended) {
+      //   throw UserError.sendEmailFailed();
+      // }
+      // const { validateCode: codeSent } = sended;
+
+      if (expiredCode !== code) {
+        console.log("operation no accept.");
+        console.log("codeSent", expiredCode);
+        throw UserError.emailNotAvailable();
       }
-
-      return res.status(StatusCodes.CREATED).json(userCreated);
+      createCookies(res, { key: "availableEmail", value: "accept" });
+      deleteCookies(res, "code");
+      return res.status(StatusCodes.OK).json({
+        message: "email disponivel.",
+      });
     } catch (error) {
       return handleError(error as BaseError, res);
     }
@@ -113,15 +113,10 @@ export class UserController {
 
   async forgotPassword(req: Request, res: Response) {
     try {
-      const newInfoUserSchema = z.object({
-        email: z.string(),
-        newPassword: z.string(),
-        verifyEmail: z.boolean(),
-      });
+      const { email, verifyEmail, newPassword } = req.body as NewPasswordI;
 
-      const { email, newPassword, verifyEmail } = newInfoUserSchema.parse(
-        req.body
-      );
+      userValidator.passwordValidator({ email, verifyEmail, newPassword });
+
       const passwordChanged = await userService.updatePassword(
         email,
         newPassword,
@@ -131,6 +126,12 @@ export class UserController {
       if (!passwordChanged) {
         throw UserError.emailNotFound();
       }
+
+      if (passwordChanged === "not-accept") {
+        throw UserError.noAccpet();
+      }
+
+      return res.status(StatusCodes.OK).json(passwordChanged);
     } catch (error) {
       return handleError(error as BaseError, res);
     }

@@ -3,4 +3,7 @@ const REGEXEMAIL =
 
 const MILLISECONDSINTHREEMONTHS = 78900480000;
 
-export { REGEXEMAIL, MILLISECONDSINTHREEMONTHS };
+const dynamicCode = () =>
+  Math.floor(100000 + Math.random() * 900000).toString();
+
+export { REGEXEMAIL, MILLISECONDSINTHREEMONTHS, dynamicCode };
