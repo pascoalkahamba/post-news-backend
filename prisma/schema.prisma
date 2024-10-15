@@ -17,30 +17,37 @@ model User {
   id          Int          @id @default(autoincrement())
   email       String       @unique
   password    String       @unique
-  name        String
+  username    String
+  cellPhone   Int          @unique
+  role        Role         @default(USER)
   posts       Post[]
+  likes       Like[]
   profile     Profile?
   friendships Friendship[]
+  Comments    Comment[]
+  Replies     Reply[]
 }
 
 model Profile {
-  id     Int     @id @default(autoincrement())
-  bio    String
-  photo  String?
-  user   User    @relation(fields: [userId], references: [id])
-  userId Int     @unique
+  id      Int      @id @default(autoincrement())
+  bio     String
+  picture Picture?
+  user    User     @relation(fields: [userId], references: [id])
+  userId  Int      @unique
 }
 
 model Post {
-  id         Int      @id @default(autoincrement())
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  title      String   @db.VarChar(255)
+  id         Int       @id @default(autoincrement())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  title      String    @db.VarChar(255)
+  picture    Picture?
+  comments   Comment[] // Relation with Comment model
+  likes      Like[] // Relation with Like model
   content    String
-  photos     String?
-  dateOfPost DateTime @db.Date
-  published  Boolean  @default(false)
-  author     User     @relation(fields: [authorId], references: [id])
+  dateOfPost DateTime  @db.Date
+  published  Boolean   @default(false)
+  author     User      @relation(fields: [authorId], references: [id])
   authorId   Int
 }
 
@@ -49,4 +56,65 @@ model Friendship {
   user         User     @relation(fields: [userId], references: [id])
   userId       Int
   dateOfFriend DateTime @db.Date
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  postId    Int
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], map: "Comment_user_fkey")
+  post      Post     @relation(fields: [postId], references: [id], map: "Comment_post_fkey")
+  replies   Reply[] // Relation with Reply model
+  likes     Like[] // Relation with Like model
+  createdAt DateTime @default(now())
+}
+
+model Reply {
+  id        Int      @id @default(autoincrement())
+  content   String
+  commentId Int
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], map: "Reply_user_fkey")
+  comment   Comment  @relation(fields: [commentId], references: [id], map: "Reply_comment_fkey")
+  likes     Like[] // Relation with Like model
+  createdAt DateTime @default(now())
+}
+
+model Like {
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  likeableId   Int // This can be the ID of a post, comment, or reply
+  likeableType RoleLike @default(POST) // Indicates whether it's a 'Post', 'Comment', or 'Reply'
+  user         User     @relation(fields: [userId], references: [id], map: "Like_user_fkey")
+  createdAt    DateTime @default(now())
+  Post         Post?    @relation(fields: [postId], references: [id])
+  postId       Int?
+  Comment      Comment? @relation(fields: [commentId], references: [id])
+  commentId    Int?
+  Reply        Reply?   @relation(fields: [replyId], references: [id])
+  replyId      Int?
+
+  @@unique([userId, likeableId, likeableType]) // Ensures unique likes for each user-item pair
+}
+
+model Picture {
+  id        Int      @id @default(autoincrement())
+  url       String   @db.LongText
+  name      String
+  post      Post?    @relation(fields: [postId], references: [id])
+  profile   Profile? @relation(fields: [profileId], references: [id])
+  profileId Int?     @unique
+  postId    Int?     @unique
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum RoleLike {
+  POST
+  COMMENT
+  REPLY
 }

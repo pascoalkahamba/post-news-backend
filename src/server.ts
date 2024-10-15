@@ -16,33 +16,74 @@ app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
 const port = process.env.PORT;
 
-// function isHappy(num: number): boolean {
-//   const numsS = num.toString().split("");
+function getSum(n: number): number {
+  const arrayNum = `${n}`.split("");
 
-//   let result = 0;
-//   const mapNums = new Map();
-//   if (num < 10) {
-//     return false;
-//   }
+  const squareSum = arrayNum.reduce((acc, num) => acc + (+num) ** 2, 0);
 
-//   for (let i = 0; i < numsS.length; i++) {
-//     const currNum = numsS[i];
-//     const currNumPlusOne = numsS[i + 1];
-//     if (!numsS.includes(currNumPlusOne)) {
-//       break;
-//     }
-//     result += Number(currNum) ** 2 + Number(currNumPlusOne) ** 2;
+  return squareSum;
+}
 
-//     if (result === 1) {
-//       return true;
-//     }
-//   }
+function isHappy(n: number): boolean {
+  const vissited: { [key: number]: boolean } = { [n]: true };
 
-//   console.log("result ", result);
+  let sum = getSum(n);
 
-//   return false;
-// }
-// console.log("happy number ", isHappy(100));
+  while (sum !== 1) {
+    sum = getSum(sum);
+
+    if (vissited[sum]) {
+      return false;
+    }
+
+    vissited[sum] = true;
+  }
+
+  return true;
+}
+
+function isIsomorphic(s: string, t: string): boolean {
+  const letters = new Set();
+  const letters2 = new Set();
+  let count01 = 0;
+  let count02 = 0;
+
+  if (s.length !== t.length) {
+    return false;
+  }
+
+  for (let i = 0; i <= s.length; i++) {
+    const currLetter = s[i];
+    if (letters.has(currLetter)) {
+      console.log("letters", letters);
+      count01++;
+    }
+    letters.add(currLetter);
+  }
+
+  for (let c = 0; c <= t.length; c++) {
+    const currLetter = t[c];
+    if (letters2.has(currLetter)) {
+      console.log("letters2", letters2);
+      count02++;
+    }
+    letters2.add(currLetter);
+  }
+
+  if (
+    (count01 >= 1 && count02 >= 1) ||
+    (s.length >= 1 && t.length >= 1 && s === t)
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
+console.log("isIsomorphic ", isIsomorphic("es", "es"));
+
+// console.log("happy number ", isHappy(192));
+
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(cookieParser());
