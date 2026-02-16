@@ -20,7 +20,7 @@ userRoutes.post(
   "/updateProfile/:id",
   upload.single("file"),
   uploadFileMiddleware,
-  userController.updateProfile
+  userController.updateProfile,
 );
 
 export { userRoutes };

@@ -81,7 +81,7 @@ export class UserService {
     const userToken = token.sign(
       { id: userExist.id },
       process.env.JWT_SECRET_KEY as string,
-      { expiresIn: "8h" }
+      { expiresIn: "8h" },
     );
     return {
       user,

@@ -7,7 +7,7 @@ import { JsonWebTokenErrorT } from "../@types";
 export async function authMiddleware(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const authorization = req.headers.authorization;

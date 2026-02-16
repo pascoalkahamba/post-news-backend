@@ -8,19 +8,19 @@ export default class UserValidator {
     if (pathError === "username") {
       return handleError(
         UserError.invalidInfo("Nome do usuario invalido."),
-        res
+        res,
       );
     }
     if (pathError === "password") {
       return handleError(
         UserError.invalidInfo("Senha do usuario invalido."),
-        res
+        res,
       );
     }
     if (pathError === "newPassword") {
       return handleError(
         UserError.invalidInfo("Nova senha do usuario invalido."),
-        res
+        res,
       );
     }
     if (pathError === "token") {
@@ -30,19 +30,19 @@ export default class UserValidator {
     if (pathError === "role") {
       return handleError(
         UserError.invalidInfo("A role do usuario deve ser ADMIN ou USER."),
-        res
+        res,
       );
     }
     if (pathError === "email") {
       return handleError(
         UserError.invalidInfo("Email do usuario invalido."),
-        res
+        res,
       );
     }
     if (pathError === "cellPhone") {
       return handleError(
         UserError.invalidInfo("Contacto do usuario invalido."),
-        res
+        res,
       );
     }
   }
