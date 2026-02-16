@@ -6,14 +6,13 @@ describe("You should able to manager user data without any mistake.", () => {
     const userService = new UserService();
 
     expect(
-      userService.create(
-        {
-          name: "Pascoal Kahamba",
-          email: "franciscofetapi10@gmail.com",
-          password: "pascoalcomercial",
-        },
-        false
-      )
+      userService.create({
+        username: "Pascoal Kahamba",
+        email: "franciscofetapi10@gmail.com",
+        password: "pascoalcomercial",
+        cellPhone: "923456789",
+        role: "USER",
+      }),
     ).resolves.toBeTypeOf("object");
   });
 
@@ -21,7 +20,7 @@ describe("You should able to manager user data without any mistake.", () => {
     const userService = new UserService();
 
     expect(
-      userService.login("pascoalcomercial25@gmail.com", "Kahamba123")
+      userService.login("pascoalcomercial25@gmail.com", "Kahamba123"),
     ).resolves.toBeTypeOf("object");
   });
 });
