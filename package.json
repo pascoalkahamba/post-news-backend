@@ -8,8 +8,8 @@
   "scripts": {
     "dev": "tsx watch ./src/server.ts",
     "test": "vitest",
-    "build": "prisma generate && prisma migrate deploy && tsc",
-    "start": "node dist/server.js"
+    "build": "prisma generate && tsc",
+    "start": "prisma migrate deploy && node dist/server.js"
   },
   "devDependencies": {
     "@eslint/js": "^9.5.0",
