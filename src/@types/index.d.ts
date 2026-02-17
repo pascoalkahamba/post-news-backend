@@ -4,6 +4,7 @@ export type UserModalT = Pick<
   User,
   "username" | "password" | "email" | "cellPhone" | "role"
 >;
+export type UserModal = Pick<User, "username" | "password" | "email">;
 export type JsonWebTokenErrorT = "jwt malformed" | "jwt must be provided";
 export type UserRoleT = "ADMIN" | "USER";
 export type TOperation = "resetPassword" | "deleteAccount";

@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { TPathError } from "../@types";
+import { TPathError, UserModal } from "../@types";
 import UserValidator from "../validators/user.validator";
 import { handleError } from "../errors/handleError";
 import { BaseError } from "../errors/baseError";
