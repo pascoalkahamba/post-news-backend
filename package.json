@@ -9,7 +9,7 @@
     "dev": "tsx watch ./src/server.ts",
     "test": "vitest",
     "build": "prisma generate && tsc",
-    "start": "node dist/src/server.js"
+    "start": "node dist/server.js"
   },
   "devDependencies": {
     "@eslint/js": "^9.5.0",

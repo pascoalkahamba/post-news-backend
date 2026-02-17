@@ -15,7 +15,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.options("*", cors(corsOptions));
-const port = process.env.PORT || 3001;
+const port = process.env.PORT ?? 3001;
 
 //sudo systemctl is-enabled mysql - para verificar se o servidor do mysql esta activo.
 
