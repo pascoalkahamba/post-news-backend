@@ -1,10 +1,11 @@
-import { User } from "@prisma/client";
+import { Category, User } from "@prisma/client";
 
 export type UserModalT = Pick<
   User,
   "username" | "password" | "email" | "cellPhone" | "role"
 >;
 export type UserModal = Pick<User, "username" | "password" | "email">;
+export type CategoryModalT = Pick<Category, "name" | "description">;
 export type JsonWebTokenErrorT = "jwt malformed" | "jwt must be provided";
 export type UserRoleT = "ADMIN" | "USER";
 export type TOperation = "resetPassword" | "deleteAccount";
