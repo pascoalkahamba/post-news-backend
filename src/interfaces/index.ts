@@ -1,4 +1,4 @@
-import { TOperation } from "../@types";
+import { PostModalT, TOperation } from "../@types";
 
 export interface UserCreatedI {
   name: string;
@@ -8,6 +8,17 @@ export interface UserCreatedI {
 export interface CookiesProps<T> {
   key: string;
   value: T;
+}
+
+export interface CreatePostI extends PostModalT {
+  picture?: PictureI;
+}
+
+export interface UpdatePostI {
+  title?: string;
+  content?: string;
+  categoryId?: number;
+  picture?: PictureI;
 }
 
 export interface UpdateProfileI {
@@ -32,8 +43,8 @@ export interface ProfileI {
 export interface CreatePostI {
   title: string;
   content: string;
-  picture: PictureI;
-  userId: number;
+  picture?: PictureI;
+  authorId: number;
   categoryId: number;
 }
 

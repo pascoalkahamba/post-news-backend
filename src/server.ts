@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import { verificationCodeRoutes } from "./routes/verificationCode.routes";
 import { categoryRoutes } from "./routes/category.routes";
+import { postRoutes } from "./routes/post.routes";
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use(cookieParser());
 app.use("/user", userRoutes);
 app.use("/verificationCode", verificationCodeRoutes);
 app.use("/category", categoryRoutes);
+app.use("/post", postRoutes);
 
 app.listen(port, () => {
   console.log("server running!");

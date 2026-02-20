@@ -66,6 +66,21 @@ const categoryUpdateSchema = zod.object({
   description: zod.string().min(2).max(500),
 });
 
+const postCreateSchema = zod.object({
+  title: zod.string().min(2).max(255),
+  content: zod.string().min(2),
+  categoryId: zod.number(),
+  picture: pictureSchema.optional(),
+});
+
+const postUpdateSchema = zod.object({
+  title: zod.string().min(2).max(255).optional(),
+  content: zod.string().min(2).optional(),
+  categoryId: zod.number().optional(),
+  published: zod.boolean().optional(),
+  picture: pictureSchema.optional(),
+});
+
 export {
   envSchema,
   userCreateSchema,
@@ -77,4 +92,6 @@ export {
   verifyCodeAndProceedSchema,
   categoryCreateSchema,
   categoryUpdateSchema,
+  postCreateSchema,
+  postUpdateSchema,
 };
