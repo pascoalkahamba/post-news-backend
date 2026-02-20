@@ -56,6 +56,16 @@ const updateProfileSchema = zod.object({
   bio: zod.string().min(10).max(500),
 });
 
+const categoryCreateSchema = zod.object({
+  name: zod.string().min(2).max(100),
+  description: zod.string().min(2).max(500),
+});
+
+const categoryUpdateSchema = zod.object({
+  name: zod.string().min(2).max(100),
+  description: zod.string().min(2).max(500),
+});
+
 export {
   envSchema,
   userCreateSchema,
@@ -65,4 +75,6 @@ export {
   requestVerificationCodeSchema,
   resetPasswordSchema,
   verifyCodeAndProceedSchema,
+  categoryCreateSchema,
+  categoryUpdateSchema,
 };
