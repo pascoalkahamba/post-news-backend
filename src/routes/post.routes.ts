@@ -7,15 +7,13 @@ import upload from "../config/multerConfig";
 const postRoutes = express.Router();
 const postController = new PostController();
 
-// Public routes - get all, get by id, get published
 postRoutes.get("/", postController.getAll);
 postRoutes.get("/:id", postController.getById);
 
-// Protected routes - create, update, delete, toggle publish
 postRoutes.use(authMiddleware);
 postRoutes.post(
   "/create",
-  upload.single("picture"),
+  upload.single("file"),
   uploadFileMiddleware,
   postController.create,
 );

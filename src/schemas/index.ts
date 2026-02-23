@@ -69,8 +69,7 @@ const categoryUpdateSchema = zod.object({
 const postCreateSchema = zod.object({
   title: zod.string().min(2).max(255),
   content: zod.string().min(2),
-  categoryId: zod.number(),
-  picture: pictureSchema.optional(),
+  categoryId: zod.string(),
 });
 
 const postUpdateSchema = zod.object({
@@ -78,7 +77,6 @@ const postUpdateSchema = zod.object({
   content: zod.string().min(2).optional(),
   categoryId: zod.number().optional(),
   published: zod.boolean().optional(),
-  picture: pictureSchema.optional(),
 });
 
 export {

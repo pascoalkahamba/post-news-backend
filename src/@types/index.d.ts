@@ -27,4 +27,7 @@ export type TPathError =
   | "code"
   | "operation"
   | "emailNotFound"
-  | "emailAlreadyExist";
+  | "emailAlreadyExist"
+  | "title"
+  | "content"
+  | "categoryId";

@@ -1,5 +1,6 @@
 import { Response, Request } from "express";
 import { TPathError } from "../@types";
+import PostValidator from "../validators/post.validator";
 import { handleError } from "../errors/handleError";
 import { BaseError } from "../errors/baseError";
 import { PostService } from "../services/post.service";
@@ -10,23 +11,23 @@ import { ZodError } from "zod";
 import { postCreateSchema, postUpdateSchema } from "../schemas";
 
 const postService = new PostService();
+const postValidator = new PostValidator();
 
 export class PostController {
   async create(req: Request, res: Response) {
     try {
-      const { title, content, categoryId, picture } = postCreateSchema.parse(
-        req.body,
-      );
+      const { title, content, categoryId } = postCreateSchema.parse(req.body);
 
-      // Get userId from the authenticated user (set by auth middleware)
       const userId = req.user.id;
+
+      console.log("body", req.body);
 
       const postCreated = await postService.create({
         title,
         content,
-        categoryId,
+        categoryId: +categoryId,
         authorId: userId,
-        picture: picture || { name: "", url: "" },
+        picture: { name: req.fileName || "", url: req.fileUrl || "" },
       });
 
       if (!postCreated) {
@@ -39,10 +40,8 @@ export class PostController {
         const validationError = fromError(error);
         const { details } = validationError;
         const pathError = details[0].path[0] as TPathError;
-        return handleError(
-          new BaseError(pathError, StatusCodes.BAD_REQUEST),
-          res,
-        );
+        console.log("pathError", pathError);
+        postValidator.validator(pathError, res);
       } else {
         return handleError(error as BaseError, res);
       }
@@ -52,11 +51,8 @@ export class PostController {
   async update(req: Request, res: Response) {
     try {
       const id = req.params.id as unknown as number;
-      const { title, content, categoryId, picture } = postUpdateSchema.parse(
-        req.body,
-      );
+      const { title, content, categoryId } = postUpdateSchema.parse(req.body);
 
-      // Get userId from the authenticated user (set by auth middleware)
       const userId = req.user.id;
 
       const postUpdated = await postService.update(
@@ -65,7 +61,7 @@ export class PostController {
           title,
           content,
           categoryId,
-          picture: picture || undefined,
+          picture: { name: req.fileName || "", url: req.fileUrl || "" },
         },
         userId,
       );
@@ -84,10 +80,7 @@ export class PostController {
         const validationError = fromError(error);
         const { details } = validationError;
         const pathError = details[0].path[0] as TPathError;
-        return handleError(
-          new BaseError(pathError, StatusCodes.BAD_REQUEST),
-          res,
-        );
+        postValidator.validator(pathError, res);
       } else {
         return handleError(error as BaseError, res);
       }
@@ -98,7 +91,6 @@ export class PostController {
     try {
       const id = req.params.id as unknown as number;
 
-      // Get userId from the authenticated user (set by auth middleware)
       const userId = req.user.id;
 
       const postDeleted = await postService.delete(+id, userId);
@@ -117,10 +109,7 @@ export class PostController {
         const validationError = fromError(error);
         const { details } = validationError;
         const pathError = details[0].path[0] as TPathError;
-        return handleError(
-          new BaseError(pathError, StatusCodes.BAD_REQUEST),
-          res,
-        );
+        postValidator.validator(pathError, res);
       } else {
         return handleError(error as BaseError, res);
       }
@@ -149,10 +138,7 @@ export class PostController {
         const validationError = fromError(error);
         const { details } = validationError;
         const pathError = details[0].path[0] as TPathError;
-        return handleError(
-          new BaseError(pathError, StatusCodes.BAD_REQUEST),
-          res,
-        );
+        postValidator.validator(pathError, res);
       } else {
         return handleError(error as BaseError, res);
       }
@@ -188,7 +174,6 @@ export class PostController {
     try {
       const id = req.params.id as unknown as number;
 
-      // Get userId from the authenticated user (set by auth middleware)
       const userId = req.user.id;
 
       const post = await postService.togglePublish(+id, userId);
@@ -207,10 +192,7 @@ export class PostController {
         const validationError = fromError(error);
         const { details } = validationError;
         const pathError = details[0].path[0] as TPathError;
-        return handleError(
-          new BaseError(pathError, StatusCodes.BAD_REQUEST),
-          res,
-        );
+        postValidator.validator(pathError, res);
       } else {
         return handleError(error as BaseError, res);
       }
