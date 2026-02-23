@@ -15,7 +15,7 @@ userRoutes.post("/requestPasswordReset", userController.requestPasswordReset);
 userRoutes.use(authMiddleware);
 userRoutes.get("/:id", userController.getUserById);
 userRoutes.get("/getAllUsers", userController.getAllUsers);
-userRoutes.delete("/delete/:id", userController.delete);
+userRoutes.delete("/deleteAccount/:id", userController.delete);
 userRoutes.post(
   "/updateProfile/:id",
   upload.single("file"),

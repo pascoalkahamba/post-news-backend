@@ -20,8 +20,6 @@ export class PostController {
 
       const userId = req.user.id;
 
-      console.log("body", req.body);
-
       const postCreated = await postService.create({
         title,
         content,

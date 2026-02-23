@@ -11,8 +11,8 @@ export class PostService {
         authorId: postData.authorId,
         picture: {
           create: {
-            name: postData.picture?.name || "default_picture_name",
-            url: postData.picture?.url || "default_picture_url",
+            name: postData.picture?.name || "",
+            url: postData.picture?.url || "",
           },
         },
       },

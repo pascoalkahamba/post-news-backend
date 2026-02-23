@@ -239,7 +239,16 @@ export class UserService {
         username: true,
         email: true,
         cellPhone: true,
-        posts: true,
+        posts: {
+          select: {
+            id: true,
+            category: true,
+            picture: true,
+            _count: true,
+            title: true,
+            content: true,
+          },
+        },
         likes: true,
         profile: {
           select: {
