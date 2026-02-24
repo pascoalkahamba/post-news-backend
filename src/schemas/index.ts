@@ -75,7 +75,7 @@ const postCreateSchema = zod.object({
 const postUpdateSchema = zod.object({
   title: zod.string().min(2).max(255).optional(),
   content: zod.string().min(2).optional(),
-  categoryId: zod.number().optional(),
+  categoryId: zod.string().optional(),
   published: zod.boolean().optional(),
 });
 

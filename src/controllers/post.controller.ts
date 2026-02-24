@@ -53,12 +53,14 @@ export class PostController {
 
       const userId = req.user.id;
 
+      console.log("teste", req.body);
+
       const postUpdated = await postService.update(
         +id,
         {
           title,
           content,
-          categoryId,
+          categoryId: Number(categoryId),
           picture: { name: req.fileName || "", url: req.fileUrl || "" },
         },
         userId,
