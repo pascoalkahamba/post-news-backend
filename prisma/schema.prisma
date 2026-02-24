@@ -53,9 +53,9 @@ model Post {
   updatedAt  DateTime  @updatedAt
   title      String    @db.VarChar(255)
   picture    Picture?
-  comments   Comment[] // Relation with Comment model
-  likes      Like[] // Relation with Like model
-  content    String
+  comments   Comment[]
+  likes      Like[]
+  content    String    @db.LongText
   published  Boolean   @default(false)
   category   Category  @relation(fields: [categoryId], references: [id])
   author     User      @relation(fields: [authorId], references: [id])
@@ -72,19 +72,19 @@ model Friendship {
 
 model Comment {
   id        Int      @id @default(autoincrement())
-  content   String
+  content   String   @db.LongText
   postId    Int
   userId    Int
   user      User     @relation(fields: [userId], references: [id], map: "Comment_user_fkey")
   post      Post     @relation(fields: [postId], references: [id], map: "Comment_post_fkey")
-  replies   Reply[] // Relation with Reply model
-  likes     Like[] // Relation with Like model
+  replies   Reply[]
+  likes     Like[]
   createdAt DateTime @default(now())
 }
 
 model Reply {
   id        Int      @id @default(autoincrement())
-  content   String
+  content   String   @db.LongText
   commentId Int
   userId    Int
   user      User     @relation(fields: [userId], references: [id], map: "Reply_user_fkey")

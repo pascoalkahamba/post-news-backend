@@ -7,7 +7,7 @@ import { StatusCodes } from "http-status-codes";
 export const uploadFileMiddleware = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const file = req.file;
@@ -17,7 +17,7 @@ export const uploadFileMiddleware = async (
 
     const storageRef = ref(
       storage,
-      `uploads/${Date.now()}-${file.originalname}`
+      `uploads/${Date.now()}-${file.originalname}`,
     );
     const metadata = {
       contentType: file.mimetype,
@@ -26,7 +26,7 @@ export const uploadFileMiddleware = async (
     const snapshot = await uploadBytesResumable(
       storageRef,
       file.buffer,
-      metadata
+      metadata,
     );
     const fileUrl = await getDownloadURL(snapshot.ref);
 
