@@ -40,6 +40,10 @@ export class PostService {
   async update(id: number, postData: Partial<CreatePostI>, userId: number) {
     const postExist = await prismaService.prisma.post.findUnique({
       where: { id },
+      select: {
+        picture: true,
+        authorId: true,
+      },
     });
 
     if (!postExist) return null;
@@ -72,8 +76,12 @@ export class PostService {
     if (postData.picture) {
       updateData.picture = {
         update: {
-          name: postData.picture.name,
-          url: postData.picture.url,
+          name: !postData.picture.name
+            ? (postExist.picture?.name as string)
+            : postData.picture.name,
+          url: !postData.picture.url
+            ? (postExist.picture?.url as string)
+            : postData.picture.url,
         },
       };
     }

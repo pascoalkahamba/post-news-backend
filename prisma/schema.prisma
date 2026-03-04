@@ -94,20 +94,20 @@ model Reply {
 }
 
 model Like {
-  id           Int      @id @default(autoincrement())
-  userId       Int
-  likeableId   Int // This can be the ID of a post, comment, or reply
-  likeableType RoleLike @default(POST) // Indicates whether it's a 'Post', 'Comment', or 'Reply'
-  user         User     @relation(fields: [userId], references: [id], map: "Like_user_fkey")
-  createdAt    DateTime @default(now())
-  Post         Post?    @relation(fields: [postId], references: [id])
-  postId       Int?
-  Comment      Comment? @relation(fields: [commentId], references: [id])
-  commentId    Int?
-  Reply        Reply?   @relation(fields: [replyId], references: [id])
-  replyId      Int?
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], map: "Like_user_fkey")
+  createdAt DateTime @default(now())
+  Post      Post?    @relation(fields: [postId], references: [id])
+  postId    Int?
+  Comment   Comment? @relation(fields: [commentId], references: [id])
+  commentId Int?
+  Reply     Reply?   @relation(fields: [replyId], references: [id])
+  replyId   Int?
 
-  @@unique([userId, likeableId, likeableType]) // Ensures unique likes for each user-item pair
+  @@unique([userId, postId])
+  @@unique([userId, commentId])
+  @@unique([userId, replyId])
 }
 
 model Picture {
