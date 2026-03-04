@@ -17,7 +17,12 @@ postRoutes.post(
   uploadFileMiddleware,
   postController.create,
 );
-postRoutes.put("/update/:id", postController.update);
+postRoutes.put(
+  "/update/:id",
+  upload.single("file"),
+  uploadFileMiddleware,
+  postController.update,
+);
 postRoutes.delete("/delete/:id", postController.delete);
 postRoutes.patch("/togglePublish/:id", postController.togglePublish);
 

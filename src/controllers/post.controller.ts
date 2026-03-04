@@ -38,7 +38,6 @@ export class PostController {
         const validationError = fromError(error);
         const { details } = validationError;
         const pathError = details[0].path[0] as TPathError;
-        console.log("pathError", pathError);
         postValidator.validator(pathError, res);
       } else {
         return handleError(error as BaseError, res);
@@ -52,8 +51,6 @@ export class PostController {
       const { title, content, categoryId } = postUpdateSchema.parse(req.body);
 
       const userId = req.user.id;
-
-      console.log("teste", req.body);
 
       const postUpdated = await postService.update(
         +id,
