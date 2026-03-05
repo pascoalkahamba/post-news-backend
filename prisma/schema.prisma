@@ -25,7 +25,7 @@ model User {
   updatedAt      DateTime     @updatedAt
   role           Role         @default(USER)
   posts          Post[]
-  likes          Like[]
+  reactions      Reaction[]
   profile        Profile?
   friendships    Friendship[]
   Comments       Comment[]
@@ -48,17 +48,17 @@ model Category {
 }
 
 model Post {
-  id         Int       @id @default(autoincrement())
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  title      String    @db.VarChar(255)
+  id         Int        @id @default(autoincrement())
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  title      String     @db.VarChar(255)
   picture    Picture?
   comments   Comment[]
-  likes      Like[]
-  content    String    @db.LongText
-  published  Boolean   @default(false)
-  category   Category  @relation(fields: [categoryId], references: [id])
-  author     User      @relation(fields: [authorId], references: [id])
+  reactions  Reaction[]
+  content    String     @db.LongText
+  published  Boolean    @default(false)
+  category   Category   @relation(fields: [categoryId], references: [id])
+  author     User       @relation(fields: [authorId], references: [id])
   authorId   Int
   categoryId Int
 }
@@ -71,39 +71,43 @@ model Friendship {
 }
 
 model Comment {
-  id        Int      @id @default(autoincrement())
-  content   String   @db.LongText
+  id        Int        @id @default(autoincrement())
+  content   String     @db.LongText
   postId    Int
   userId    Int
-  user      User     @relation(fields: [userId], references: [id], map: "Comment_user_fkey")
-  post      Post     @relation(fields: [postId], references: [id], map: "Comment_post_fkey")
+  user      User       @relation(fields: [userId], references: [id], map: "Comment_user_fkey")
+  post      Post       @relation(fields: [postId], references: [id], map: "Comment_post_fkey")
   replies   Reply[]
-  likes     Like[]
-  createdAt DateTime @default(now())
+  reactions Reaction[]
+  createdAt DateTime   @default(now())
 }
 
 model Reply {
-  id        Int      @id @default(autoincrement())
-  content   String   @db.LongText
+  id        Int        @id @default(autoincrement())
+  content   String     @db.LongText
   commentId Int
   userId    Int
-  user      User     @relation(fields: [userId], references: [id], map: "Reply_user_fkey")
-  comment   Comment  @relation(fields: [commentId], references: [id], map: "Reply_comment_fkey")
-  likes     Like[] // Relation with Like model
-  createdAt DateTime @default(now())
+  user      User       @relation(fields: [userId], references: [id], map: "Reply_user_fkey")
+  comment   Comment    @relation(fields: [commentId], references: [id], map: "Reply_comment_fkey")
+  reactions Reaction[] // Relation with Reaction model
+  createdAt DateTime   @default(now())
 }
 
-model Like {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id], map: "Like_user_fkey")
-  createdAt DateTime @default(now())
-  Post      Post?    @relation(fields: [postId], references: [id])
+model Reaction {
+  id     Int @id @default(autoincrement())
+  userId Int
+
   postId    Int?
-  Comment   Comment? @relation(fields: [commentId], references: [id])
   commentId Int?
-  Reply     Reply?   @relation(fields: [replyId], references: [id])
   replyId   Int?
+
+  type      ReactionType
+  createdAt DateTime     @default(now())
+
+  user    User     @relation(fields: [userId], references: [id])
+  post    Post?    @relation(fields: [postId], references: [id])
+  comment Comment? @relation(fields: [commentId], references: [id])
+  reply   Reply?   @relation(fields: [replyId], references: [id])
 
   @@unique([userId, postId])
   @@unique([userId, commentId])
@@ -123,6 +127,12 @@ model Picture {
 enum Role {
   USER
   ADMIN
+}
+
+enum ReactionType {
+  LIKE
+  DISLIKE
+  FAVORITE
 }
 
 model VerificationCode {
