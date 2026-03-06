@@ -8,7 +8,7 @@ export default class ReactionError {
 
   static invalidReactionType() {
     return new BaseError(
-      "Tipo de reação inválido. Use LIKE, DISLIKE ou FAVORITE.",
+      "Tipo de reação inválido. Use LIKE ou DISLIKE.",
       StatusCodes.BAD_REQUEST,
     );
   }

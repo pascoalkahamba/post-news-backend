@@ -14,19 +14,19 @@ export class ReactionService {
       const post = await prismaService.prisma.post.findUnique({
         where: { id: postId },
       });
-      if (!post) return "postNotFound";
+      if (!post) return { error: "postNotFound" };
     } else if (commentId) {
       const comment = await prismaService.prisma.comment.findUnique({
         where: { id: commentId },
       });
-      if (!comment) return "commentNotFound";
+      if (!comment) return { error: "commentNotFound" };
     } else if (replyId) {
       const reply = await prismaService.prisma.reply.findUnique({
         where: { id: replyId },
       });
-      if (!reply) return "replyNotFound";
+      if (!reply) return { error: "replyNotFound" };
     } else {
-      return "noTarget";
+      return { error: "noTarget" };
     }
 
     // Check if reaction already exists
@@ -197,50 +197,41 @@ export class ReactionService {
   }
 
   async getReactionCountsForPost(postId: number) {
-    const [likes, dislikes, favorites] = await Promise.all([
+    const [likes, dislikes] = await Promise.all([
       prismaService.prisma.reaction.count({
         where: { postId, type: "LIKE" },
       }),
       prismaService.prisma.reaction.count({
         where: { postId, type: "DISLIKE" },
       }),
-      prismaService.prisma.reaction.count({
-        where: { postId, type: "FAVORITE" },
-      }),
     ]);
 
-    return { likes, dislikes, favorites };
+    return { likeCount: likes, dislikeCount: dislikes };
   }
 
   async getReactionCountsForComment(commentId: number) {
-    const [likes, dislikes, favorites] = await Promise.all([
+    const [likes, dislikes] = await Promise.all([
       prismaService.prisma.reaction.count({
         where: { commentId, type: "LIKE" },
       }),
       prismaService.prisma.reaction.count({
         where: { commentId, type: "DISLIKE" },
       }),
-      prismaService.prisma.reaction.count({
-        where: { commentId, type: "FAVORITE" },
-      }),
     ]);
 
-    return { likes, dislikes, favorites };
+    return { likeCount: likes, dislikeCount: dislikes };
   }
 
   async getReactionCountsForReply(replyId: number) {
-    const [likes, dislikes, favorites] = await Promise.all([
+    const [likes, dislikes] = await Promise.all([
       prismaService.prisma.reaction.count({
         where: { replyId, type: "LIKE" },
       }),
       prismaService.prisma.reaction.count({
         where: { replyId, type: "DISLIKE" },
       }),
-      prismaService.prisma.reaction.count({
-        where: { replyId, type: "FAVORITE" },
-      }),
     ]);
 
-    return { likes, dislikes, favorites };
+    return { likeCount: likes, dislikeCount: dislikes };
   }
 }

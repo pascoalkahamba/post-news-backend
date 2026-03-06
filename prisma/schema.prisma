@@ -30,6 +30,7 @@ model User {
   friendships    Friendship[]
   Comments       Comment[]
   Replies        Reply[]
+  Favorite       Favorite[]
 }
 
 model Profile {
@@ -55,6 +56,7 @@ model Post {
   picture    Picture?
   comments   Comment[]
   reactions  Reaction[]
+  favorites  Favorite[]
   content    String     @db.LongText
   published  Boolean    @default(false)
   category   Category   @relation(fields: [categoryId], references: [id])
@@ -89,7 +91,7 @@ model Reply {
   userId    Int
   user      User       @relation(fields: [userId], references: [id], map: "Reply_user_fkey")
   comment   Comment    @relation(fields: [commentId], references: [id], map: "Reply_comment_fkey")
-  reactions Reaction[] // Relation with Reaction model
+  reactions Reaction[]
   createdAt DateTime   @default(now())
 }
 
@@ -114,6 +116,18 @@ model Reaction {
   @@unique([userId, replyId])
 }
 
+model Favorite {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  postId    Int
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+  post Post @relation(fields: [postId], references: [id])
+
+  @@unique([userId, postId])
+}
+
 model Picture {
   id        Int      @id @default(autoincrement())
   url       String   @db.LongText
@@ -132,7 +146,6 @@ enum Role {
 enum ReactionType {
   LIKE
   DISLIKE
-  FAVORITE
 }
 
 model VerificationCode {

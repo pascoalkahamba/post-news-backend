@@ -40,17 +40,19 @@ export class ReactionController {
         replyId,
       );
 
-      if (result === "postNotFound") {
-        throw ReactionError.targetNotFound();
-      }
-      if (result === "commentNotFound") {
-        throw ReactionError.targetNotFound();
-      }
-      if (result === "replyNotFound") {
-        throw ReactionError.targetNotFound();
-      }
-      if (result === "noTarget") {
-        throw ReactionError.targetNotFound();
+      if (result && "error" in result) {
+        if (result.error === "postNotFound") {
+          throw ReactionError.targetNotFound();
+        }
+        if (result.error === "commentNotFound") {
+          throw ReactionError.targetNotFound();
+        }
+        if (result.error === "replyNotFound") {
+          throw ReactionError.targetNotFound();
+        }
+        if (result.error === "noTarget") {
+          throw ReactionError.targetNotFound();
+        }
       }
 
       return res.status(StatusCodes.CREATED).json(result);

@@ -13,7 +13,7 @@ export type PostModalT = Pick<
 export type JsonWebTokenErrorT = "jwt malformed" | "jwt must be provided";
 export type UserRoleT = "ADMIN" | "USER";
 export type TOperation = "resetPassword" | "deleteAccount";
-export type ReactionTypeT = "LIKE" | "DISLIKE" | "FAVORITE";
+export type ReactionTypeT = "LIKE" | "DISLIKE";
 
 export type TPathError =
   | "email"
@@ -36,4 +36,5 @@ export type TPathError =
   | "postId"
   | "commentId"
   | "replyId"
-  | "reactionId";
+  | "reactionId"
+  | "favoriteId";

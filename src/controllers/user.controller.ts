@@ -183,8 +183,6 @@ export class UserController {
     try {
       const { newPassword, token } = resetPasswordSchema.parse(req.body);
 
-      //Just test
-
       const resetPassword = await userService.resetPassword(newPassword, token);
 
       if (!resetPassword) {

@@ -66,6 +66,17 @@ const categoryUpdateSchema = zod.object({
   description: zod.string().min(2).max(500),
 });
 
+const reactionCreateSchema = zod.object({
+  type: zod.enum(["LIKE", "DISLIKE"]) as zod.ZodType<ReactionTypeT>,
+  postId: zod.number().optional(),
+  commentId: zod.number().optional(),
+  replyId: zod.number().optional(),
+});
+
+const favoriteCreateSchema = zod.object({
+  postId: zod.number(),
+});
+
 const postCreateSchema = zod.object({
   title: zod.string().min(2).max(255),
   content: zod.string().min(2),
@@ -79,17 +90,11 @@ const postUpdateSchema = zod.object({
   published: zod.boolean().optional(),
 });
 
-const reactionCreateSchema = zod.object({
-  type: zod.enum(["LIKE", "DISLIKE", "FAVORITE"]) as zod.ZodType<ReactionTypeT>,
-  postId: zod.number().optional(),
-  commentId: zod.number().optional(),
-  replyId: zod.number().optional(),
-});
-
 export {
   envSchema,
   userCreateSchema,
   updateProfileSchema,
+  favoriteCreateSchema,
   pictureSchema,
   requestPasswordResetSchema,
   requestVerificationCodeSchema,

@@ -7,6 +7,7 @@ import { verificationCodeRoutes } from "./routes/verificationCode.routes";
 import { categoryRoutes } from "./routes/category.routes";
 import { postRoutes } from "./routes/post.routes";
 import { reactionRoutes } from "./routes/reaction.routes";
+import { favoriteRoutes } from "./routes/favorite.routes";
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use("/verificationCode", verificationCodeRoutes);
 app.use("/category", categoryRoutes);
 app.use("/post", postRoutes);
 app.use("/reaction", reactionRoutes);
+app.use("/favorite", favoriteRoutes);
 
 app.listen(port, () => {
   console.log("server running!");
