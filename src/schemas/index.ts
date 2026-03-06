@@ -1,5 +1,5 @@
 import { z as zod } from "zod";
-import { TOperation, UserRoleT } from "../@types";
+import { TOperation, UserRoleT, ReactionTypeT } from "../@types";
 
 const envSchema = zod.object({
   MONGODBCONNECTION: zod.string(),
@@ -79,6 +79,13 @@ const postUpdateSchema = zod.object({
   published: zod.boolean().optional(),
 });
 
+const reactionCreateSchema = zod.object({
+  type: zod.enum(["LIKE", "DISLIKE", "FAVORITE"]) as zod.ZodType<ReactionTypeT>,
+  postId: zod.number().optional(),
+  commentId: zod.number().optional(),
+  replyId: zod.number().optional(),
+});
+
 export {
   envSchema,
   userCreateSchema,
@@ -92,4 +99,5 @@ export {
   categoryUpdateSchema,
   postCreateSchema,
   postUpdateSchema,
+  reactionCreateSchema,
 };

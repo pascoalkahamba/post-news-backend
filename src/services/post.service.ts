@@ -170,7 +170,7 @@ export class PostService {
         },
         _count: {
           select: {
-            likes: true,
+            reactions: true,
             comments: true,
           },
         },
@@ -211,7 +211,7 @@ export class PostService {
             },
             _count: {
               select: {
-                likes: true,
+                reactions: true,
                 replies: true,
               },
             },
@@ -220,14 +220,14 @@ export class PostService {
             createdAt: "desc",
           },
         },
-        likes: {
+        reactions: {
           select: {
             userId: true,
           },
         },
         _count: {
           select: {
-            likes: true,
+            reactions: true,
             comments: true,
           },
         },
@@ -257,7 +257,7 @@ export class PostService {
         },
         _count: {
           select: {
-            likes: true,
+            reactions: true,
             comments: true,
           },
         },
@@ -290,7 +290,7 @@ export class PostService {
         },
         _count: {
           select: {
-            likes: true,
+            reactions: true,
             comments: true,
           },
         },
@@ -323,7 +323,7 @@ export class PostService {
         },
         _count: {
           select: {
-            likes: true,
+            reactions: true,
             comments: true,
           },
         },

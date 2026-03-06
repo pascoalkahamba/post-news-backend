@@ -6,6 +6,7 @@ import cors from "cors";
 import { verificationCodeRoutes } from "./routes/verificationCode.routes";
 import { categoryRoutes } from "./routes/category.routes";
 import { postRoutes } from "./routes/post.routes";
+import { reactionRoutes } from "./routes/reaction.routes";
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use("/user", userRoutes);
 app.use("/verificationCode", verificationCodeRoutes);
 app.use("/category", categoryRoutes);
 app.use("/post", postRoutes);
+app.use("/reaction", reactionRoutes);
 
 app.listen(port, () => {
   console.log("server running!");

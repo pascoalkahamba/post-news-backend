@@ -249,7 +249,7 @@ export class UserService {
             content: true,
           },
         },
-        likes: true,
+        reactions: true,
         profile: {
           select: {
             bio: true,
