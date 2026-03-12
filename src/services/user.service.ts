@@ -237,13 +237,19 @@ export class UserService {
       select: {
         id: true,
         username: true,
+        favorites: true,
         email: true,
         cellPhone: true,
         posts: {
           select: {
             id: true,
+            author: true,
+            comments: true,
+            createdAt: true,
             category: true,
+            favorites: true,
             picture: true,
+            reactions: true,
             _count: true,
             title: true,
             content: true,

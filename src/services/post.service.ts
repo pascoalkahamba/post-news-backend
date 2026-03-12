@@ -155,6 +155,9 @@ export class PostService {
     const posts = await prismaService.prisma.post.findMany({
       include: {
         picture: true,
+        favorites: true,
+        reactions: true,
+        comments: true,
         author: {
           select: {
             id: true,

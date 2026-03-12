@@ -9,7 +9,6 @@ export class ReactionService {
     commentId?: number,
     replyId?: number,
   ) {
-    // Check if target exists
     if (postId) {
       const post = await prismaService.prisma.post.findUnique({
         where: { id: postId },
@@ -29,7 +28,6 @@ export class ReactionService {
       return { error: "noTarget" };
     }
 
-    // Check if reaction already exists
     const existingReaction = await prismaService.prisma.reaction.findFirst({
       where: {
         userId,
@@ -41,8 +39,12 @@ export class ReactionService {
       },
     });
 
+    if (existingReaction && existingReaction.type === type) {
+      await this.delete(userId, existingReaction.id);
+      return existingReaction;
+    }
+
     if (existingReaction) {
-      // Update existing reaction
       const updatedReaction = await prismaService.prisma.reaction.update({
         where: { id: existingReaction.id },
         data: { type },
@@ -58,7 +60,6 @@ export class ReactionService {
       return updatedReaction;
     }
 
-    // Create new reaction
     const reaction = await prismaService.prisma.reaction.create({
       data: {
         userId,
@@ -197,6 +198,13 @@ export class ReactionService {
   }
 
   async getReactionCountsForPost(postId: number) {
+    const existPost = await prismaService.prisma.post.findUnique({
+      where: { id: postId },
+    });
+
+    if (!existPost) {
+      return null;
+    }
     const [likes, dislikes] = await Promise.all([
       prismaService.prisma.reaction.count({
         where: { postId, type: "LIKE" },
@@ -210,6 +218,13 @@ export class ReactionService {
   }
 
   async getReactionCountsForComment(commentId: number) {
+    const existComment = await prismaService.prisma.comment.findUnique({
+      where: { id: commentId },
+    });
+
+    if (!existComment) {
+      return null;
+    }
     const [likes, dislikes] = await Promise.all([
       prismaService.prisma.reaction.count({
         where: { commentId, type: "LIKE" },
@@ -223,6 +238,13 @@ export class ReactionService {
   }
 
   async getReactionCountsForReply(replyId: number) {
+    const existReply = await prismaService.prisma.reply.findUnique({
+      where: { id: replyId },
+    });
+
+    if (!existReply) {
+      return null;
+    }
     const [likes, dislikes] = await Promise.all([
       prismaService.prisma.reaction.count({
         where: { replyId, type: "LIKE" },

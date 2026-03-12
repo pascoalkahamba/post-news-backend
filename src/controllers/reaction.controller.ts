@@ -20,10 +20,8 @@ export class ReactionController {
         req.body,
       );
 
-      // Get userId from the authenticated user
       const userId = req.user.id;
 
-      // Validate that exactly one target is provided
       const targets = [postId, commentId, replyId].filter(Boolean);
       if (targets.length === 0) {
         throw ReactionError.targetNotFound();
@@ -150,7 +148,8 @@ export class ReactionController {
   async getCountsForPost(req: Request, res: Response) {
     try {
       const postId = req.params.postId as unknown as number;
-      const counts = await reactionService.getReactionCountsForPost(postId);
+
+      const counts = await reactionService.getReactionCountsForPost(+postId);
       return res.status(StatusCodes.OK).json(counts);
     } catch (error) {
       if (error instanceof ZodError) {

@@ -2,13 +2,11 @@ import { prismaService } from "./prisma.service";
 
 export class FavoriteService {
   async create(userId: number, postId: number) {
-    // Check if post exists
     const post = await prismaService.prisma.post.findUnique({
       where: { id: postId },
     });
     if (!post) return { error: "postNotFound" };
 
-    // Check if favorite already exists
     const existingFavorite = await prismaService.prisma.favorite.findUnique({
       where: {
         userId_postId: {
@@ -16,13 +14,25 @@ export class FavoriteService {
           postId,
         },
       },
+      select: {
+        id: true,
+        post: true,
+        user: {
+          select: {
+            id: true,
+            username: true,
+            role: true,
+            email: true,
+          },
+        },
+      },
     });
 
     if (existingFavorite) {
-      return { error: "favoriteAlreadyExists" };
+      await this.delete(userId, existingFavorite.id);
+      return existingFavorite;
     }
 
-    // Create favorite
     const favorite = await prismaService.prisma.favorite.create({
       data: {
         userId,

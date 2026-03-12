@@ -28,9 +28,9 @@ model User {
   reactions      Reaction[]
   profile        Profile?
   friendships    Friendship[]
-  Comments       Comment[]
-  Replies        Reply[]
-  Favorite       Favorite[]
+  comments       Comment[]
+  replies        Reply[]
+  favorites      Favorite[]
 }
 
 model Profile {
