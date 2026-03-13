@@ -28,14 +28,16 @@ export class ReactionService {
       return { error: "noTarget" };
     }
 
+    const target = postId
+      ? { postId }
+      : commentId
+        ? { commentId }
+        : { replyId };
+
     const existingReaction = await prismaService.prisma.reaction.findFirst({
       where: {
         userId,
-        OR: [
-          { postId: postId || null },
-          { commentId: commentId || null },
-          { replyId: replyId || null },
-        ],
+        ...target,
       },
     });
 
