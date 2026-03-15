@@ -1,22 +1,16 @@
 import { Response } from "express";
 import { TPathError } from "../@types";
+import CommentError from "../errors/commentError";
+import { handleError } from "../errors/handleError";
 
 export default class CommentValidator {
   validator(pathError: TPathError, res: Response) {
-    switch (pathError) {
-      case "content":
-        return res.status(400).json({
-          error:
-            "Conteúdo do comentário inválido. Deve ter pelo menos 1 caractere.",
-        });
-      case "postId":
-        return res.status(400).json({
-          error: "ID da publicação inválido.",
-        });
-      default:
-        return res.status(400).json({
-          error: "Dados inválidos.",
-        });
+    if (pathError === "content") {
+      return handleError(CommentError.invalidCommentContent(), res);
+    }
+
+    if (pathError === "postId") {
+      return handleError(CommentError.postNotFound(), res);
     }
   }
 }

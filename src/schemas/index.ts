@@ -96,7 +96,7 @@ const postUpdateSchema = zod.object({
 
 const commentCreateSchema = zod.object({
   content: zod.string().min(1),
-  postId: zod.string(),
+  postId: zod.number(),
 });
 
 const commentUpdateSchema = zod.object({
@@ -105,7 +105,7 @@ const commentUpdateSchema = zod.object({
 
 const replyCreateSchema = zod.object({
   content: zod.string().min(1),
-  commentId: zod.string(),
+  commentId: zod.number(),
 });
 
 const replyUpdateSchema = zod.object({

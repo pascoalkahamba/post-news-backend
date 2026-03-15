@@ -101,7 +101,6 @@ export class CommentService {
 
     if (!commentExist) return null;
 
-    // Check if user is the comment owner, post owner, or admin
     const isCommentOwner = commentExist.userId === userId;
     const isPostOwner = commentExist.post.authorId === userId;
 
