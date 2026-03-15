@@ -48,7 +48,6 @@ export class PostService {
 
     if (!postExist) return null;
 
-    // Check if user is the author or admin
     if (postExist.authorId !== userId) {
       const user = await prismaService.prisma.user.findUnique({
         where: { id: userId },
@@ -117,7 +116,6 @@ export class PostService {
 
     if (!postExist) return null;
 
-    // Check if user is the author or admin
     if (postExist.authorId !== userId) {
       const user = await prismaService.prisma.user.findUnique({
         where: { id: userId },
@@ -125,7 +123,6 @@ export class PostService {
       if (user?.role !== "ADMIN") {
         return "unauthorized";
       }
-      return "unauthorized";
     }
 
     const post = await prismaService.prisma.post.delete({
@@ -225,6 +222,16 @@ export class PostService {
         },
         reactions: {
           select: {
+            type: true,
+            id: true,
+            userId: true,
+            postId: true,
+          },
+        },
+        favorites: {
+          select: {
+            id: true,
+            postId: true,
             userId: true,
           },
         },
@@ -346,7 +353,6 @@ export class PostService {
 
     if (!postExist) return null;
 
-    // Check if user is the author or admin
     if (postExist.authorId !== userId) {
       const user = await prismaService.prisma.user.findUnique({
         where: { id: userId },

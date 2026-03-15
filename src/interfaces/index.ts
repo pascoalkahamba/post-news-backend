@@ -84,3 +84,23 @@ export interface IValidateVerificationCode {
   code: string;
   operation: TOperation;
 }
+
+export interface CreateCommentI {
+  content: string;
+  postId: number;
+  userId: number;
+}
+
+export interface UpdateCommentI {
+  content: string;
+}
+
+export interface CreateReplyI {
+  content: string;
+  commentId: number;
+  userId: number;
+}
+
+export interface UpdateReplyI {
+  content: string;
+}

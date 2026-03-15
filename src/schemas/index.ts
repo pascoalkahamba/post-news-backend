@@ -94,6 +94,24 @@ const postUpdateSchema = zod.object({
   published: zod.boolean().optional(),
 });
 
+const commentCreateSchema = zod.object({
+  content: zod.string().min(1),
+  postId: zod.string(),
+});
+
+const commentUpdateSchema = zod.object({
+  content: zod.string().min(1),
+});
+
+const replyCreateSchema = zod.object({
+  content: zod.string().min(1),
+  commentId: zod.string(),
+});
+
+const replyUpdateSchema = zod.object({
+  content: zod.string().min(1),
+});
+
 export {
   envSchema,
   userCreateSchema,
@@ -109,4 +127,8 @@ export {
   postCreateSchema,
   postUpdateSchema,
   reactionCreateSchema,
+  commentCreateSchema,
+  commentUpdateSchema,
+  replyCreateSchema,
+  replyUpdateSchema,
 };
