@@ -5,13 +5,11 @@ import { authMiddleware } from "../middlewares/auth.middleware";
 const commentRoutes = express.Router();
 const commentController = new CommentController();
 
-// Public routes
 commentRoutes.get("/", commentController.getAll);
 commentRoutes.get("/post/:postId", commentController.getByPostId);
 commentRoutes.get("/user/:userId", commentController.getByUserId);
 commentRoutes.get("/:id", commentController.getById);
 
-// Protected routes
 commentRoutes.use(authMiddleware);
 commentRoutes.post("/create", commentController.create);
 commentRoutes.put("/update/:id", commentController.update);

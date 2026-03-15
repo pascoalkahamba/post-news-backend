@@ -143,6 +143,7 @@ export class CommentService {
             username: true,
           },
         },
+        replies: true,
         post: {
           select: {
             id: true,
