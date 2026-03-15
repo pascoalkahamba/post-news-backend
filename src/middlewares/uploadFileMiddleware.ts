@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { storage } from "../config/firebaseConfig";
+import cloudinary from "../config/cloudinaryConfig";
 import { MulterError } from "multer";
 import { StatusCodes } from "http-status-codes";
+import { UploadApiResponse } from "cloudinary";
 
 export const uploadFileMiddleware = async (
   req: Request,
@@ -15,20 +15,27 @@ export const uploadFileMiddleware = async (
       return next();
     }
 
-    const storageRef = ref(
-      storage,
-      `uploads/${Date.now()}-${file.originalname}`,
-    );
-    const metadata = {
-      contentType: file.mimetype,
-    };
+    const result: UploadApiResponse = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          folder: "uploads",
+          resource_type: "auto",
+          public_name: `${Date.now()}-${file.originalname}`,
+        },
+        (error, result) => {
+          if (error) {
+            reject(error);
+          } else if (result) {
+            resolve(result);
+          } else {
+            reject(new Error("Upload failed: No result returned"));
+          }
+        },
+      );
+      uploadStream.end(file.buffer);
+    });
 
-    const snapshot = await uploadBytesResumable(
-      storageRef,
-      file.buffer,
-      metadata,
-    );
-    const fileUrl = await getDownloadURL(snapshot.ref);
+    const fileUrl = result.secure_url;
 
     req.fileUrl = fileUrl;
     req.fileName = file.originalname;

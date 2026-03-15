@@ -14,6 +14,10 @@ const envSchema = zod.object({
   appId: zod.string().min(5),
   measurementId: zod.string().min(5),
   JWT_SECRET_KEY: zod.string(),
+  CLOUDINARY_URL: zod.string().min(5),
+  CLOUDINARY_CLOUD_NAME: zod.string().min(5),
+  CLOUDINARY_API_KEY: zod.string().min(5),
+  CLOUDINARY_API_SECRET: zod.string().min(5),
 });
 
 const userCreateSchema = zod.object({
