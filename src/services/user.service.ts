@@ -247,7 +247,13 @@ export class UserService {
             comments: true,
             createdAt: true,
             category: true,
-            favorites: true,
+            favorites: {
+              select: {
+                id: true,
+                userId: true,
+                postId: true,
+              },
+            },
             picture: true,
             reactions: true,
             _count: true,

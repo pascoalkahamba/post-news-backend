@@ -37,7 +37,7 @@ model Profile {
   id      Int      @id @default(autoincrement())
   bio     String
   picture Picture?
-  user    User     @relation(fields: [userId], references: [id])
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId  Int      @unique
 }
 
@@ -59,15 +59,15 @@ model Post {
   favorites  Favorite[]
   content    String     @db.LongText
   published  Boolean    @default(false)
-  category   Category   @relation(fields: [categoryId], references: [id])
-  author     User       @relation(fields: [authorId], references: [id])
+  category   Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  author     User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId   Int
   categoryId Int
 }
 
 model Friendship {
   id           Int      @id @default(autoincrement())
-  user         User     @relation(fields: [userId], references: [id])
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId       Int
   dateOfFriend DateTime @db.Date
 }
@@ -77,8 +77,8 @@ model Comment {
   content   String     @db.LongText
   postId    Int
   userId    Int
-  user      User       @relation(fields: [userId], references: [id], map: "Comment_user_fkey")
-  post      Post       @relation(fields: [postId], references: [id], map: "Comment_post_fkey")
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade, map: "Comment_user_fkey")
+  post      Post       @relation(fields: [postId], references: [id], onDelete: Cascade, map: "Comment_post_fkey")
   replies   Reply[]
   reactions Reaction[]
   createdAt DateTime   @default(now())
@@ -89,8 +89,8 @@ model Reply {
   content   String     @db.LongText
   commentId Int
   userId    Int
-  user      User       @relation(fields: [userId], references: [id], map: "Reply_user_fkey")
-  comment   Comment    @relation(fields: [commentId], references: [id], map: "Reply_comment_fkey")
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade, map: "Reply_user_fkey")
+  comment   Comment    @relation(fields: [commentId], references: [id], onDelete: Cascade, map: "Reply_comment_fkey")
   reactions Reaction[]
   createdAt DateTime   @default(now())
 }
@@ -106,10 +106,10 @@ model Reaction {
   type      ReactionType
   createdAt DateTime     @default(now())
 
-  user    User     @relation(fields: [userId], references: [id])
-  post    Post?    @relation(fields: [postId], references: [id])
-  comment Comment? @relation(fields: [commentId], references: [id])
-  reply   Reply?   @relation(fields: [replyId], references: [id])
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post    Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  comment Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  reply   Reply?   @relation(fields: [replyId], references: [id], onDelete: Cascade)
 
   @@unique([userId, postId])
   @@unique([userId, commentId])
@@ -122,8 +122,8 @@ model Favorite {
   postId    Int
   createdAt DateTime @default(now())
 
-  user User @relation(fields: [userId], references: [id])
-  post Post @relation(fields: [postId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@unique([userId, postId])
 }
@@ -132,8 +132,8 @@ model Picture {
   id        Int      @id @default(autoincrement())
   url       String   @db.LongText
   name      String
-  post      Post?    @relation(fields: [postId], references: [id])
-  profile   Profile? @relation(fields: [profileId], references: [id])
+  post      Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  profile   Profile? @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId Int?     @unique
   postId    Int?     @unique
 }
