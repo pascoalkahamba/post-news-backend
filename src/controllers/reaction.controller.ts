@@ -167,7 +167,7 @@ export class ReactionController {
     try {
       const commentId = req.params.commentId as unknown as number;
       const counts =
-        await reactionService.getReactionCountsForComment(commentId);
+        await reactionService.getReactionCountsForComment(+commentId);
       return res.status(StatusCodes.OK).json(counts);
     } catch (error) {
       if (error instanceof ZodError) {
@@ -184,7 +184,7 @@ export class ReactionController {
   async getCountsForReply(req: Request, res: Response) {
     try {
       const replyId = req.params.replyId as unknown as number;
-      const counts = await reactionService.getReactionCountsForReply(replyId);
+      const counts = await reactionService.getReactionCountsForReply(+replyId);
       return res.status(StatusCodes.OK).json(counts);
     } catch (error) {
       if (error instanceof ZodError) {
