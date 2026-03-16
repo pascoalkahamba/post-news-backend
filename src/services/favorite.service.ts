@@ -100,6 +100,7 @@ export class FavoriteService {
             content: true,
             createdAt: true,
             picture: true,
+            category: true,
             author: {
               select: {
                 id: true,

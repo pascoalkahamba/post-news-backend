@@ -203,10 +203,54 @@ export class PostService {
         },
         comments: {
           include: {
+            reactions: {
+              select: {
+                type: true,
+                id: true,
+                userId: true,
+                postId: true,
+              },
+            },
+            replies: {
+              select: {
+                id: true,
+                reactions: {
+                  select: {
+                    type: true,
+                    id: true,
+                    userId: true,
+                    postId: true,
+                  },
+                },
+                userId: true,
+                content: true,
+                commentId: true,
+                createdAt: true,
+                user: {
+                  select: {
+                    id: true,
+                    username: true,
+                    email: true,
+
+                    profile: {
+                      select: {
+                        id: true,
+                        picture: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
             user: {
               select: {
                 id: true,
                 username: true,
+                profile: {
+                  select: {
+                    picture: true,
+                  },
+                },
               },
             },
             _count: {

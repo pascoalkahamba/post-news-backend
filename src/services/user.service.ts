@@ -265,6 +265,8 @@ export class UserService {
         profile: {
           select: {
             bio: true,
+            userId: true,
+            id: true,
             picture: true,
           },
         },
