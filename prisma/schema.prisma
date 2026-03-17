@@ -14,20 +14,21 @@ datasource db {
 }
 
 model User {
-  id             Int          @id @default(autoincrement())
-  email          String       @unique
-  password       String       @unique
+  id             Int        @id @default(autoincrement())
+  email          String     @unique
+  password       String     @unique
   username       String
-  cellPhone      String       @unique
-  resetToken     String?      @unique
+  cellPhone      String     @unique
+  resetToken     String?    @unique
   resetExpiresAt DateTime?
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  role           Role         @default(USER)
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  role           Role       @default(USER)
+  following      Follow[]   @relation("following")
+  followers      Follow[]   @relation("followers")
   posts          Post[]
   reactions      Reaction[]
   profile        Profile?
-  friendships    Friendship[]
   comments       Comment[]
   replies        Reply[]
   favorites      Favorite[]
@@ -65,11 +66,17 @@ model Post {
   categoryId Int
 }
 
-model Friendship {
-  id           Int      @id @default(autoincrement())
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId       Int
-  dateOfFriend DateTime @db.Date
+model Follow {
+  id          Int          @id @default(autoincrement())
+  followerId  Int
+  followingId Int
+  follower    User         @relation("following", fields: [followerId], references: [id])
+  following   User         @relation("followers", fields: [followingId], references: [id])
+  status      FollowStatus @default(PENDING)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@unique([followerId, followingId])
 }
 
 model Comment {
@@ -146,6 +153,12 @@ enum Role {
 enum ReactionType {
   LIKE
   DISLIKE
+}
+
+enum FollowStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
 }
 
 model VerificationCode {
