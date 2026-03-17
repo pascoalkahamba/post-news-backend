@@ -1,0 +1,21 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.reactionRoutes = void 0;
+const express_1 = __importDefault(require("express"));
+const reaction_controller_1 = require("../controllers/reaction.controller");
+const auth_middleware_1 = require("../middlewares/auth.middleware");
+const reactionRoutes = express_1.default.Router();
+exports.reactionRoutes = reactionRoutes;
+const reactionController = new reaction_controller_1.ReactionController();
+reactionRoutes.get("/post/:postId", reactionController.getByPostId);
+reactionRoutes.get("/comment/:commentId", reactionController.getByCommentId);
+reactionRoutes.get("/reply/:replyId", reactionController.getByReplyId);
+reactionRoutes.get("/counts/post/:postId", reactionController.getCountsForPost);
+reactionRoutes.get("/counts/comment/:commentId", reactionController.getCountsForComment);
+reactionRoutes.get("/counts/reply/:replyId", reactionController.getCountsForReply);
+reactionRoutes.use(auth_middleware_1.authMiddleware);
+reactionRoutes.post("/create", reactionController.create);
+reactionRoutes.delete("/:id", reactionController.delete);

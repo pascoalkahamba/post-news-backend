@@ -1,0 +1,21 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.postRoutes = void 0;
+const express_1 = __importDefault(require("express"));
+const post_controller_1 = require("../controllers/post.controller");
+const auth_middleware_1 = require("../middlewares/auth.middleware");
+const uploadFileMiddleware_1 = require("../middlewares/uploadFileMiddleware");
+const multerConfig_1 = __importDefault(require("../config/multerConfig"));
+const postRoutes = express_1.default.Router();
+exports.postRoutes = postRoutes;
+const postController = new post_controller_1.PostController();
+postRoutes.get("/", postController.getAll);
+postRoutes.get("/:id", postController.getById);
+postRoutes.use(auth_middleware_1.authMiddleware);
+postRoutes.post("/create", multerConfig_1.default.single("file"), uploadFileMiddleware_1.uploadFileMiddleware, postController.create);
+postRoutes.put("/update/:id", multerConfig_1.default.single("file"), uploadFileMiddleware_1.uploadFileMiddleware, postController.update);
+postRoutes.delete("/delete/:id", postController.delete);
+postRoutes.patch("/togglePublish/:id", postController.togglePublish);

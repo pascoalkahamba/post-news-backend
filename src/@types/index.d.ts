@@ -37,4 +37,8 @@ export type TPathError =
   | "commentId"
   | "replyId"
   | "reactionId"
-  | "favoriteId";
+  | "favoriteId"
+  | "followingId"
+  | "followerId"
+  | "status";
+export type FollowStatusT = "PENDING" | "ACCEPTED" | "REJECTED";

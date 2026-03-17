@@ -1,5 +1,5 @@
 import { z as zod } from "zod";
-import { TOperation, UserRoleT, ReactionTypeT } from "../@types";
+import { TOperation, UserRoleT, ReactionTypeT, FollowStatusT } from "../@types";
 
 const envSchema = zod.object({
   MONGODBCONNECTION: zod.string(),
@@ -112,6 +112,18 @@ const replyUpdateSchema = zod.object({
   content: zod.string().min(1),
 });
 
+const followCreateSchema = zod.object({
+  followingId: zod.number(),
+});
+
+const followUpdateSchema = zod.object({
+  status: zod.enum([
+    "PENDING",
+    "ACCEPTED",
+    "REJECTED",
+  ]) as zod.ZodType<FollowStatusT>,
+});
+
 export {
   envSchema,
   userCreateSchema,
@@ -131,4 +143,6 @@ export {
   commentUpdateSchema,
   replyCreateSchema,
   replyUpdateSchema,
+  followCreateSchema,
+  followUpdateSchema,
 };

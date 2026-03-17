@@ -1,0 +1,24 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.followRoutes = void 0;
+const express_1 = __importDefault(require("express"));
+const follow_controller_1 = require("../controllers/follow.controller");
+const auth_middleware_1 = require("../middlewares/auth.middleware");
+const followRoutes = express_1.default.Router();
+exports.followRoutes = followRoutes;
+const followController = new follow_controller_1.FollowController();
+// Public routes
+followRoutes.get("/followers/:userId", followController.getFollowers);
+followRoutes.get("/following/:userId", followController.getFollowing);
+followRoutes.get("/followersCount/:userId", followController.getFollowersCount);
+followRoutes.get("/followingCount/:userId", followController.getFollowingCount);
+// Protected routes
+followRoutes.use(auth_middleware_1.authMiddleware);
+followRoutes.post("/create", followController.create);
+followRoutes.delete("/delete/:id", followController.delete);
+followRoutes.patch("/updateStatus/:id", followController.updateStatus);
+followRoutes.get("/pendingRequests", followController.getPendingRequests);
+followRoutes.get("/status/:userId", followController.getFollowStatus);

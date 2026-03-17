@@ -1,4 +1,5 @@
 import { PostModalT, TOperation } from "../@types";
+import { FollowStatusT } from "../@types";
 
 export interface UserCreatedI {
   name: string;
@@ -103,4 +104,14 @@ export interface CreateReplyI {
 
 export interface UpdateReplyI {
   content: string;
+}
+
+export interface CreateFollowI {
+  followingId: number;
+  followerId: number;
+  status?: FollowStatusT;
+}
+
+export interface UpdateFollowI {
+  status: FollowStatusT;
 }

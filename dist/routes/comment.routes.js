@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.commentRoutes = void 0;
+const express_1 = __importDefault(require("express"));
+const comment_controller_1 = require("../controllers/comment.controller");
+const auth_middleware_1 = require("../middlewares/auth.middleware");
+const commentRoutes = express_1.default.Router();
+exports.commentRoutes = commentRoutes;
+const commentController = new comment_controller_1.CommentController();
+commentRoutes.get("/", commentController.getAll);
+commentRoutes.get("/post/:postId", commentController.getByPostId);
+commentRoutes.get("/user/:userId", commentController.getByUserId);
+commentRoutes.get("/:id", commentController.getById);
+commentRoutes.use(auth_middleware_1.authMiddleware);
+commentRoutes.post("/create", commentController.create);
+commentRoutes.put("/update/:id", commentController.update);
+commentRoutes.delete("/delete/:id", commentController.delete);

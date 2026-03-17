@@ -10,6 +10,7 @@ import { reactionRoutes } from "./routes/reaction.routes";
 import { favoriteRoutes } from "./routes/favorite.routes";
 import { commentRoutes } from "./routes/comment.routes";
 import { replyRoutes } from "./routes/reply.routes";
+import { followRoutes } from "./routes/follow.routes";
 
 const app = express();
 
@@ -36,6 +37,7 @@ app.use("/reaction", reactionRoutes);
 app.use("/favorite", favoriteRoutes);
 app.use("/comment", commentRoutes);
 app.use("/reply", replyRoutes);
+app.use("/follow", followRoutes);
 
 app.listen(port, () => {
   console.log("server running!");
