@@ -23,16 +23,19 @@ const managerEmail = new ManagerEmail();
 export class UserController {
   async create(req: Request, res: Response) {
     try {
-      const { email, password, username, cellPhone, role } =
+      const { email, password, username, cellPhone, role, profession } =
         userCreateSchema.parse(req.body);
 
-      const userCreated = await userService.create({
+      const userData = {
         email,
         password,
         username,
+        profession,
         cellPhone,
         role,
-      });
+      };
+
+      const userCreated = await userService.create(userData);
 
       if (!userCreated) {
         throw UserError.emailOrCellPhoneAlreadyExist();
@@ -205,7 +208,7 @@ export class UserController {
   async updateProfile(req: Request, res: Response) {
     try {
       const id = req.params.id as unknown as number;
-      const { username, password, email, cellPhone, bio } =
+      const { username, password, email, cellPhone, bio, profession } =
         updateProfileSchema.parse(req.body);
 
       const userUpdated = await userService.updateProfile({
@@ -215,6 +218,7 @@ export class UserController {
         email,
         cellPhone,
         bio,
+        profession,
         picture: {
           url: req.fileUrl || "",
           name: req.fileName || "",

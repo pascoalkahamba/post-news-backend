@@ -1,5 +1,6 @@
 import { PostModalT, TOperation } from "../@types";
 import { FollowStatusT } from "../@types";
+import { UserRoleT } from "../@types";
 
 export interface UserCreatedI {
   name: string;
@@ -29,10 +30,8 @@ export interface UpdateProfileI {
   email: string;
   cellPhone: string;
   bio: string;
-  picture: {
-    url: string;
-    name: string;
-  };
+  profession: string;
+  picture: PictureI;
 }
 
 export interface ProfileI {
@@ -84,6 +83,15 @@ export interface IValidateVerificationCode {
   email: string;
   code: string;
   operation: TOperation;
+}
+
+export interface UserModalWithProfession {
+  email: string;
+  username: string;
+  password: string;
+  cellPhone: string;
+  profession: string;
+  role: UserRoleT;
 }
 
 export interface CreateCommentI {

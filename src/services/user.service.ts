@@ -38,6 +38,7 @@ export class UserService {
         username: user.username,
         cellPhone: user.cellPhone,
         password: hashPassword,
+        profession: user.profession,
         profile: {
           create: {
             bio: "Aqui pode ser a sua biografia",
@@ -177,7 +178,16 @@ export class UserService {
   }
 
   async updateProfile(userInfo: UpdateProfileI) {
-    const { email, username, password, cellPhone, bio, picture, id } = userInfo;
+    const {
+      email,
+      username,
+      password,
+      cellPhone,
+      bio,
+      picture,
+      id,
+      profession,
+    } = userInfo;
     const hashPassword = await bcrypt.hash(password ? password : "", 10);
 
     const currentUser = await prismaService.prisma.user.findFirst({
@@ -206,6 +216,7 @@ export class UserService {
         password: password ? hashPassword : currentUser.password,
         email,
         cellPhone,
+        profession,
         profile: {
           update: {
             bio,
@@ -237,6 +248,52 @@ export class UserService {
       select: {
         id: true,
         username: true,
+        profession: true,
+        followers: {
+          select: {
+            followingId: true,
+            followerId: true,
+            following: true,
+            status: true,
+            follower: {
+              select: {
+                id: true,
+                username: true,
+                posts: true,
+                email: true,
+                following: true,
+                profile: {
+                  select: {
+                    id: true,
+                    picture: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        following: {
+          select: {
+            followingId: true,
+            followerId: true,
+            status: true,
+            following: {
+              select: {
+                id: true,
+                username: true,
+                posts: true,
+                email: true,
+                following: true,
+                profile: {
+                  select: {
+                    id: true,
+                    picture: true,
+                  },
+                },
+              },
+            },
+          },
+        },
         favorites: true,
         email: true,
         cellPhone: true,
@@ -245,6 +302,7 @@ export class UserService {
             id: true,
             author: true,
             comments: true,
+            published: true,
             createdAt: true,
             category: true,
             favorites: {
@@ -285,6 +343,7 @@ export class UserService {
       select: {
         id: true,
         username: true,
+        profession: true,
         email: true,
         cellPhone: true,
       },

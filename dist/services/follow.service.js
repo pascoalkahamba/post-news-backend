@@ -14,18 +14,15 @@ const prisma_service_1 = require("./prisma.service");
 class FollowService {
     create(followerId, followingId) {
         return __awaiter(this, void 0, void 0, function* () {
-            // Check if user to follow exists
             const userToFollow = yield prisma_service_1.prismaService.prisma.user.findUnique({
                 where: { id: followingId },
             });
             if (!userToFollow) {
                 return { error: "userNotFound" };
             }
-            // Check if trying to follow yourself
             if (followerId === followingId) {
                 return { error: "cannotFollowYourself" };
             }
-            // Check if follow already exists
             const existingFollow = yield prisma_service_1.prismaService.prisma.follow.findUnique({
                 where: {
                     followerId_followingId: {
@@ -35,15 +32,12 @@ class FollowService {
                 },
             });
             if (existingFollow) {
-                // If already following, unfollow (delete)
                 if (existingFollow.status === "ACCEPTED") {
                     yield this.delete(followerId, existingFollow.id);
                     return { message: "Unfollowed successfully", follow: null };
                 }
-                // If pending or rejected, just return the existing follow
                 return { error: "followAlreadyExists", follow: existingFollow };
             }
-            // Create new follow
             const follow = yield prisma_service_1.prismaService.prisma.follow.create({
                 data: {
                     followerId,
@@ -111,7 +105,6 @@ class FollowService {
             if (!follow) {
                 return null;
             }
-            // Only the person being followed can accept/reject
             if (follow.followingId !== userId) {
                 return "unauthorized";
             }

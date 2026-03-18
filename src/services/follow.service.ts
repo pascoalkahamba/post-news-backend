@@ -97,7 +97,9 @@ export class FollowService {
 
   async updateStatus(followId: number, userId: number, status: FollowStatusT) {
     const follow = await prismaService.prisma.follow.findUnique({
-      where: { id: followId },
+      where: {
+        followerId_followingId: { followerId: followId, followingId: userId },
+      },
     });
 
     if (!follow) {
@@ -109,7 +111,9 @@ export class FollowService {
     }
 
     const updatedFollow = await prismaService.prisma.follow.update({
-      where: { id: followId },
+      where: {
+        followerId_followingId: { followerId: followId, followingId: userId },
+      },
       data: {
         status,
       },
@@ -145,6 +149,8 @@ export class FollowService {
           select: {
             id: true,
             username: true,
+            posts: true,
+            following: true,
             email: true,
             profile: {
               select: {
@@ -174,10 +180,14 @@ export class FollowService {
           select: {
             id: true,
             username: true,
+            profession: true,
+            following: true,
+            posts: true,
             email: true,
             profile: {
               select: {
                 id: true,
+                userId: true,
                 picture: true,
               },
             },
@@ -203,7 +213,9 @@ export class FollowService {
           select: {
             id: true,
             username: true,
+            posts: true,
             email: true,
+            following: true,
             profile: {
               select: {
                 id: true,
@@ -232,10 +244,24 @@ export class FollowService {
       select: {
         id: true,
         status: true,
+        follower: {
+          select: {
+            username: true,
+            id: true,
+            email: true,
+          },
+        },
+        following: {
+          select: {
+            username: true,
+            id: true,
+            email: true,
+          },
+        },
       },
     });
 
-    return { isFollowing: !!follow, status: follow?.status || null };
+    return { isFollowing: !!follow, ...follow };
   }
 
   async getFollowersCount(userId: number) {

@@ -26,6 +26,7 @@ const userCreateSchema = zod.object({
   password: zod.string().min(6).max(50),
   cellPhone: zod.string().min(9).max(9),
   role: zod.string().min(2).max(10) as zod.ZodType<UserRoleT>,
+  profession: zod.string().min(3).max(100),
 });
 
 const requestPasswordResetSchema = userCreateSchema.pick({
@@ -58,6 +59,7 @@ const updateProfileSchema = zod.object({
   email: zod.string().email().min(5).max(50),
   cellPhone: zod.string().length(9),
   bio: zod.string().min(10).max(500),
+  profession: zod.string().min(3).max(100),
 });
 
 const categoryCreateSchema = zod.object({

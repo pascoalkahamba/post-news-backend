@@ -3,7 +3,7 @@ import { Category, User, Post } from "@prisma/client";
 export type UserModalT = Pick<
   User,
   "username" | "password" | "email" | "cellPhone" | "role"
->;
+> & { profession?: string | null };
 export type UserModal = Pick<User, "username" | "password" | "email">;
 export type CategoryModalT = Pick<Category, "name" | "description">;
 export type PostModalT = Pick<
@@ -40,5 +40,6 @@ export type TPathError =
   | "favoriteId"
   | "followingId"
   | "followerId"
-  | "status";
+  | "status"
+  | "profession";
 export type FollowStatusT = "PENDING" | "ACCEPTED" | "REJECTED";

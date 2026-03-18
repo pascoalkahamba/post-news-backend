@@ -57,6 +57,7 @@ class UserService {
                     username: user.username,
                     cellPhone: user.cellPhone,
                     password: hashPassword,
+                    profession: user.profession || null,
                     profile: {
                         create: {
                             bio: "Aqui pode ser a sua biografia",
@@ -179,7 +180,7 @@ class UserService {
     updateProfile(userInfo) {
         return __awaiter(this, void 0, void 0, function* () {
             var _a, _b, _c, _d;
-            const { email, username, password, cellPhone, bio, picture, id } = userInfo;
+            const { email, username, password, cellPhone, bio, picture, id, profession, } = userInfo;
             const hashPassword = yield bcrypt_1.default.hash(password ? password : "", 10);
             const currentUser = yield prisma_service_1.prismaService.prisma.user.findFirst({
                 where: { id },
@@ -206,6 +207,7 @@ class UserService {
                     password: password ? hashPassword : currentUser.password,
                     email,
                     cellPhone,
+                    profession: profession || null,
                     profile: {
                         update: {
                             bio,
@@ -237,6 +239,7 @@ class UserService {
                 select: {
                     id: true,
                     username: true,
+                    profession: true,
                     favorites: true,
                     email: true,
                     cellPhone: true,
@@ -284,6 +287,7 @@ class UserService {
                 select: {
                     id: true,
                     username: true,
+                    profession: true,
                     email: true,
                     cellPhone: true,
                 },

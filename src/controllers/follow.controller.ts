@@ -87,6 +87,9 @@ export class FollowController {
 
       const userId = req.user.id;
 
+      console.log("followId", followId);
+      console.log("userId", userId);
+
       const followUpdated = await followService.updateStatus(
         +followId,
         userId,
@@ -116,7 +119,7 @@ export class FollowController {
 
   async getFollowers(req: Request, res: Response) {
     try {
-      const userId = req.params.userId as unknown as number;
+      const userId = req.user.id;
 
       const followers = await followService.getFollowers(+userId);
 
@@ -135,7 +138,7 @@ export class FollowController {
 
   async getFollowing(req: Request, res: Response) {
     try {
-      const userId = req.params.userId as unknown as number;
+      const userId = req.user.id;
 
       const following = await followService.getFollowing(+userId);
 

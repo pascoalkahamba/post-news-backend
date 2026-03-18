@@ -23,6 +23,7 @@ model User {
   resetExpiresAt DateTime?
   createdAt      DateTime   @default(now())
   updatedAt      DateTime   @updatedAt
+  profession     String?
   role           Role       @default(USER)
   following      Follow[]   @relation("following")
   followers      Follow[]   @relation("followers")
@@ -59,7 +60,7 @@ model Post {
   reactions  Reaction[]
   favorites  Favorite[]
   content    String     @db.LongText
-  published  Boolean    @default(false)
+  published  Boolean    @default(true)
   category   Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   author     User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId   Int

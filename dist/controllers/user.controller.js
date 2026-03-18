@@ -29,14 +29,18 @@ class UserController {
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { email, password, username, cellPhone, role } = schemas_1.userCreateSchema.parse(req.body);
-                const userCreated = yield userService.create({
+                const { email, password, username, cellPhone, role, profession } = schemas_1.userCreateSchema.parse(req.body);
+                const userData = {
                     email,
                     password,
                     username,
                     cellPhone,
                     role,
-                });
+                };
+                if (profession) {
+                    userData.profession = profession;
+                }
+                const userCreated = yield userService.create(userData);
                 if (!userCreated) {
                     throw userError_1.default.emailOrCellPhoneAlreadyExist();
                 }
@@ -210,7 +214,7 @@ class UserController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const id = req.params.id;
-                const { username, password, email, cellPhone, bio } = schemas_1.updateProfileSchema.parse(req.body);
+                const { username, password, email, cellPhone, bio, profession } = schemas_1.updateProfileSchema.parse(req.body);
                 const userUpdated = yield userService.updateProfile({
                     id: +id,
                     username,
@@ -218,6 +222,7 @@ class UserController {
                     email,
                     cellPhone,
                     bio,
+                    profession,
                     picture: {
                         url: req.fileUrl || "",
                         name: req.fileName || "",
