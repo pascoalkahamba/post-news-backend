@@ -36,7 +36,7 @@ export class FollowService {
       data: {
         followerId,
         followingId,
-        status: "PENDING",
+        status: "ACCEPTED",
       },
       include: {
         follower: {

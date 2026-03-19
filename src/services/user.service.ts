@@ -255,6 +255,7 @@ export class UserService {
             followerId: true,
             following: true,
             status: true,
+            createdAt: true,
             follower: {
               select: {
                 id: true,
@@ -281,6 +282,7 @@ export class UserService {
               select: {
                 id: true,
                 username: true,
+                createdAt: true,
                 posts: true,
                 email: true,
                 following: true,
