@@ -4,8 +4,8 @@ import {
   UserRoleT,
   ReactionTypeT,
   FollowStatusT,
-  NotificationTypeT,
-  EntityTypeT,
+  NotificationT,
+  EntityT,
 } from "../@types";
 
 const envSchema = zod.object({
@@ -144,13 +144,9 @@ const notificationCreateSchema = zod
       "COMMENT",
       "REPLY",
       "POST",
-    ]) as zod.ZodType<NotificationTypeT>,
+    ]) as zod.ZodType<NotificationT>,
     entityId: zod.number().optional(),
-    entityType: zod.enum([
-      "POST",
-      "COMMENT",
-      "REPLY",
-    ]) as zod.ZodType<EntityTypeT>,
+    entityType: zod.enum(["POST", "COMMENT", "REPLY"]) as zod.ZodType<EntityT>,
   })
   .partial({ entityId: true, entityType: true });
 

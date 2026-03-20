@@ -140,11 +140,11 @@ model Favorite {
 
 model Notification {
   id         Int              @id @default(autoincrement())
-  userId     Int 
-  actorId    Int 
+  userId     Int
+  actorId    Int
   type       NotificationType
-  entityId   Int? 
-  entityType EntityType? 
+  entityId   Int?
+  entityType EntityType?
   read       Boolean          @default(false)
   createdAt  DateTime         @default(now())
 
@@ -183,6 +183,7 @@ enum NotificationType {
   UNFOLLOW
   LIKE
   COMMENT
+  FAVORITE
   REPLY
   POST
 }

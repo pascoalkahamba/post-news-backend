@@ -48,11 +48,12 @@ export type TPathError =
   | "entityId"
   | "read";
 export type FollowStatusT = "PENDING" | "ACCEPTED" | "REJECTED";
-export type NotificationTypeT =
+export type NotificationT =
   | "FOLLOW"
   | "UNFOLLOW"
   | "LIKE"
   | "COMMENT"
+  | "FAVORITE"
   | "REPLY"
   | "POST";
-export type EntityTypeT = "POST" | "COMMENT" | "REPLY";
+export type EntityT = "POST" | "COMMENT" | "REPLY";

@@ -83,7 +83,7 @@ export class ReactionService {
       },
     });
 
-    if (postId) {
+    if (postId && reaction.type === "LIKE") {
       const post = await prismaService.prisma.post.findUnique({
         where: { id: postId },
         select: { authorId: true },
@@ -97,7 +97,7 @@ export class ReactionService {
           entityType: "POST",
         });
       }
-    } else if (commentId) {
+    } else if (commentId && reaction.type === "LIKE") {
       const comment = await prismaService.prisma.comment.findUnique({
         where: { id: commentId },
         select: { userId: true },
@@ -111,7 +111,7 @@ export class ReactionService {
           entityType: "COMMENT",
         });
       }
-    } else if (replyId) {
+    } else if (replyId && reaction.type === "LIKE") {
       const reply = await prismaService.prisma.reply.findUnique({
         where: { id: replyId },
         select: { userId: true },

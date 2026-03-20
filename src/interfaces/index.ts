@@ -1,4 +1,4 @@
-import { PostModalT, TOperation } from "../@types";
+import { EntityT, NotificationT, PostModalT, TOperation } from "../@types";
 import { FollowStatusT } from "../@types";
 import { UserRoleT } from "../@types";
 
@@ -127,9 +127,9 @@ export interface UpdateFollowI {
 export interface CreateNotificationI {
   userId: number;
   actorId: number;
-  type: "FOLLOW" | "UNFOLLOW" | "LIKE" | "COMMENT" | "REPLY" | "POST";
+  type: NotificationT;
   entityId?: number;
-  entityType?: "POST" | "COMMENT" | "REPLY";
+  entityType?: EntityT;
 }
 
 export interface UpdateNotificationI {

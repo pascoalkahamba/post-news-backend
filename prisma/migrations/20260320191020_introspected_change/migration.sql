@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Notification` MODIFY `type` ENUM('FOLLOW', 'UNFOLLOW', 'LIKE', 'COMMENT', 'FAVORITE', 'REPLY', 'POST') NOT NULL;
