@@ -34,6 +34,25 @@ export class PostService {
       },
     });
 
+    const followers = await prismaService.prisma.follow.findMany({
+      where: { followingId: postData.authorId, status: "ACCEPTED" },
+      select: {
+        followerId: true,
+      },
+    });
+
+    if (followers.length === 0) return post;
+
+    await prismaService.prisma.notification.createMany({
+      data: followers.map((follower) => ({
+        userId: follower.followerId,
+        actorId: postData.authorId,
+        type: "POST",
+        entityId: post.id,
+        entityType: "POST",
+      })),
+    });
+
     return post;
   }
 

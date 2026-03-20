@@ -14,25 +14,27 @@ datasource db {
 }
 
 model User {
-  id             Int        @id @default(autoincrement())
-  email          String     @unique
-  password       String     @unique
-  username       String
-  cellPhone      String     @unique
-  resetToken     String?    @unique
-  resetExpiresAt DateTime?
-  createdAt      DateTime   @default(now())
-  updatedAt      DateTime   @updatedAt
-  profession     String?
-  role           Role       @default(USER)
-  following      Follow[]   @relation("following")
-  followers      Follow[]   @relation("followers")
-  posts          Post[]
-  reactions      Reaction[]
-  profile        Profile?
-  comments       Comment[]
-  replies        Reply[]
-  favorites      Favorite[]
+  id                     Int            @id @default(autoincrement())
+  email                  String         @unique
+  password               String         @unique
+  username               String
+  cellPhone              String         @unique
+  resetToken             String?        @unique
+  resetExpiresAt         DateTime?
+  createdAt              DateTime       @default(now())
+  updatedAt              DateTime       @updatedAt
+  profession             String?
+  role                   Role           @default(USER)
+  following              Follow[]       @relation("following")
+  followers              Follow[]       @relation("followers")
+  notifications          Notification[] @relation("UserNotifications")
+  triggeredNotifications Notification[] @relation("ActorNotifications")
+  posts                  Post[]
+  reactions              Reaction[]
+  profile                Profile?
+  comments               Comment[]
+  replies                Reply[]
+  favorites              Favorite[]
 }
 
 model Profile {
@@ -136,6 +138,20 @@ model Favorite {
   @@unique([userId, postId])
 }
 
+model Notification {
+  id         Int              @id @default(autoincrement())
+  userId     Int 
+  actorId    Int 
+  type       NotificationType
+  entityId   Int? 
+  entityType EntityType? 
+  read       Boolean          @default(false)
+  createdAt  DateTime         @default(now())
+
+  user  User @relation("UserNotifications", fields: [userId], references: [id])
+  actor User @relation("ActorNotifications", fields: [actorId], references: [id])
+}
+
 model Picture {
   id        Int      @id @default(autoincrement())
   url       String   @db.LongText
@@ -160,6 +176,21 @@ enum FollowStatus {
   PENDING
   ACCEPTED
   REJECTED
+}
+
+enum NotificationType {
+  FOLLOW
+  UNFOLLOW
+  LIKE
+  COMMENT
+  REPLY
+  POST
+}
+
+enum EntityType {
+  POST
+  COMMENT
+  REPLY
 }
 
 model VerificationCode {

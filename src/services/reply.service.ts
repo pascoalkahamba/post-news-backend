@@ -1,4 +1,7 @@
 import { prismaService } from "./prisma.service";
+import { NotificationService } from "./notification.service";
+
+const notificationService = new NotificationService();
 
 export class ReplyService {
   async create(replyData: {
@@ -23,6 +26,12 @@ export class ReplyService {
           select: {
             id: true,
             content: true,
+            userId: true,
+            post: {
+              select: {
+                authorId: true,
+              },
+            },
           },
         },
         _count: {
@@ -32,6 +41,16 @@ export class ReplyService {
         },
       },
     });
+
+    if (reply.comment && reply.comment.userId !== replyData.userId) {
+      await notificationService.create({
+        userId: reply.comment.userId,
+        actorId: replyData.userId,
+        type: "REPLY",
+        entityId: reply.id,
+        entityType: "COMMENT",
+      });
+    }
 
     return reply;
   }
@@ -103,7 +122,6 @@ export class ReplyService {
 
     if (!replyExist) return null;
 
-    // Check if user is the reply owner, comment owner (which is the post author via comment), or admin
     const isReplyOwner = replyExist.userId === userId;
 
     if (!isReplyOwner) {

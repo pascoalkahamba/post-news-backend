@@ -1,5 +1,8 @@
 import { prismaService } from "./prisma.service";
 import { FollowStatusT } from "../@types";
+import { NotificationService } from "./notification.service";
+
+const notificationService = new NotificationService();
 
 export class FollowService {
   async create(followerId: number, followingId: number) {
@@ -27,6 +30,11 @@ export class FollowService {
     if (existingFollow) {
       if (existingFollow.status === "ACCEPTED") {
         await this.delete(followerId, existingFollow.id);
+        await notificationService.create({
+          userId: followingId,
+          actorId: followerId,
+          type: "UNFOLLOW",
+        });
         return { message: "Unfollowed successfully", follow: null };
       }
       return { error: "followAlreadyExists", follow: existingFollow };
@@ -54,6 +62,12 @@ export class FollowService {
           },
         },
       },
+    });
+
+    await notificationService.create({
+      userId: followingId,
+      actorId: followerId,
+      type: "FOLLOW",
     });
 
     return follow;

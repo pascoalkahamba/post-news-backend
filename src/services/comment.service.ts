@@ -1,4 +1,7 @@
 import { prismaService } from "./prisma.service";
+import { NotificationService } from "./notification.service";
+
+const notificationService = new NotificationService();
 
 export class CommentService {
   async create(commentData: {
@@ -23,6 +26,7 @@ export class CommentService {
           select: {
             id: true,
             title: true,
+            authorId: true,
           },
         },
         _count: {
@@ -33,6 +37,16 @@ export class CommentService {
         },
       },
     });
+
+    if (comment.post && comment.post.authorId !== commentData.userId) {
+      await notificationService.create({
+        userId: comment.post.authorId,
+        actorId: commentData.userId,
+        type: "COMMENT",
+        entityId: comment.id,
+        entityType: "POST",
+      });
+    }
 
     return comment;
   }

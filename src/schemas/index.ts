@@ -1,5 +1,12 @@
 import { z as zod } from "zod";
-import { TOperation, UserRoleT, ReactionTypeT, FollowStatusT } from "../@types";
+import {
+  TOperation,
+  UserRoleT,
+  ReactionTypeT,
+  FollowStatusT,
+  NotificationTypeT,
+  EntityTypeT,
+} from "../@types";
 
 const envSchema = zod.object({
   MONGODBCONNECTION: zod.string(),
@@ -98,7 +105,7 @@ const postUpdateSchema = zod.object({
 
 const commentCreateSchema = zod.object({
   content: zod.string().min(1),
-  postId: zod.number(),
+  postId: zod.string(),
 });
 
 const commentUpdateSchema = zod.object({
@@ -126,6 +133,31 @@ const followUpdateSchema = zod.object({
   ]) as zod.ZodType<FollowStatusT>,
 });
 
+const notificationCreateSchema = zod
+  .object({
+    userId: zod.number(),
+    actorId: zod.number(),
+    type: zod.enum([
+      "FOLLOW",
+      "UNFOLLOW",
+      "LIKE",
+      "COMMENT",
+      "REPLY",
+      "POST",
+    ]) as zod.ZodType<NotificationTypeT>,
+    entityId: zod.number().optional(),
+    entityType: zod.enum([
+      "POST",
+      "COMMENT",
+      "REPLY",
+    ]) as zod.ZodType<EntityTypeT>,
+  })
+  .partial({ entityId: true, entityType: true });
+
+const notificationUpdateSchema = zod.object({
+  read: zod.boolean().optional(),
+});
+
 export {
   envSchema,
   userCreateSchema,
@@ -147,4 +179,6 @@ export {
   replyUpdateSchema,
   followCreateSchema,
   followUpdateSchema,
+  notificationCreateSchema,
+  notificationUpdateSchema,
 };

@@ -41,5 +41,18 @@ export type TPathError =
   | "followingId"
   | "followerId"
   | "status"
-  | "profession";
+  | "profession"
+  | "userId"
+  | "actorId"
+  | "entityType"
+  | "entityId"
+  | "read";
 export type FollowStatusT = "PENDING" | "ACCEPTED" | "REJECTED";
+export type NotificationTypeT =
+  | "FOLLOW"
+  | "UNFOLLOW"
+  | "LIKE"
+  | "COMMENT"
+  | "REPLY"
+  | "POST";
+export type EntityTypeT = "POST" | "COMMENT" | "REPLY";

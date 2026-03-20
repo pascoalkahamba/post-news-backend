@@ -1,5 +1,8 @@
 import { ReactionTypeT } from "../@types";
 import { prismaService } from "./prisma.service";
+import { NotificationService } from "./notification.service";
+
+const notificationService = new NotificationService();
 
 export class ReactionService {
   async create(
@@ -79,6 +82,50 @@ export class ReactionService {
         },
       },
     });
+
+    if (postId) {
+      const post = await prismaService.prisma.post.findUnique({
+        where: { id: postId },
+        select: { authorId: true },
+      });
+      if (post && post.authorId !== userId) {
+        await notificationService.create({
+          userId: post.authorId,
+          actorId: userId,
+          type: "LIKE",
+          entityId: postId,
+          entityType: "POST",
+        });
+      }
+    } else if (commentId) {
+      const comment = await prismaService.prisma.comment.findUnique({
+        where: { id: commentId },
+        select: { userId: true },
+      });
+      if (comment && comment.userId !== userId) {
+        await notificationService.create({
+          userId: comment.userId,
+          actorId: userId,
+          type: "LIKE",
+          entityId: commentId,
+          entityType: "COMMENT",
+        });
+      }
+    } else if (replyId) {
+      const reply = await prismaService.prisma.reply.findUnique({
+        where: { id: replyId },
+        select: { userId: true },
+      });
+      if (reply && reply.userId !== userId) {
+        await notificationService.create({
+          userId: reply.userId,
+          actorId: userId,
+          type: "LIKE",
+          entityId: replyId,
+          entityType: "REPLY",
+        });
+      }
+    }
 
     return reaction;
   }

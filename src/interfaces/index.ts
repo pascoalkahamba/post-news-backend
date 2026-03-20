@@ -123,3 +123,15 @@ export interface CreateFollowI {
 export interface UpdateFollowI {
   status: FollowStatusT;
 }
+
+export interface CreateNotificationI {
+  userId: number;
+  actorId: number;
+  type: "FOLLOW" | "UNFOLLOW" | "LIKE" | "COMMENT" | "REPLY" | "POST";
+  entityId?: number;
+  entityType?: "POST" | "COMMENT" | "REPLY";
+}
+
+export interface UpdateNotificationI {
+  read?: boolean;
+}

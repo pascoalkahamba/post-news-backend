@@ -1,4 +1,7 @@
 import { prismaService } from "./prisma.service";
+import { NotificationService } from "./notification.service";
+
+const notificationService = new NotificationService();
 
 export class FavoriteService {
   async create(userId: number, postId: number) {
@@ -49,10 +52,21 @@ export class FavoriteService {
           select: {
             id: true,
             title: true,
+            authorId: true,
           },
         },
       },
     });
+
+    if (favorite.post && favorite.post.authorId !== userId) {
+      await notificationService.create({
+        userId: favorite.post.authorId,
+        actorId: userId,
+        type: "LIKE",
+        entityId: postId,
+        entityType: "POST",
+      });
+    }
 
     return favorite;
   }

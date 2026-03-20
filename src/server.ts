@@ -11,6 +11,7 @@ import { favoriteRoutes } from "./routes/favorite.routes";
 import { commentRoutes } from "./routes/comment.routes";
 import { replyRoutes } from "./routes/reply.routes";
 import { followRoutes } from "./routes/follow.routes";
+import { notificationRoutes } from "./routes/notification.routes";
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.use("/favorite", favoriteRoutes);
 app.use("/comment", commentRoutes);
 app.use("/reply", replyRoutes);
 app.use("/follow", followRoutes);
+app.use("/notification", notificationRoutes);
 
 app.listen(port, () => {
   console.log("server running!");
