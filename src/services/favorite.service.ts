@@ -62,7 +62,7 @@ export class FavoriteService {
       await notificationService.create({
         userId: favorite.post.authorId,
         actorId: userId,
-        type: "LIKE",
+        type: "FAVORITE",
         entityId: postId,
         entityType: "POST",
       });
